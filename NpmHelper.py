@@ -22,12 +22,13 @@ class NpmWrapper:
 class PackageDataInfo:
 
     def __init__(self, rawData: dict):
-        print(rawData.keys())
+        #print(rawData.keys())
         self.name =  rawData["name"]
         self.description= rawData["description"]
-        print(rawData["dist-tags"])
-        #self.version= rawData["versions"]
         self.version= rawData["dist-tags"]["latest"]
         self.author= rawData["author"]["name"]
+        self.license= rawData["license"]
+        self.keywords= ", ".join(rawData["keywords"])
 
+        self.readmeLines = rawData["readme"].split("\\r\\n")
 
