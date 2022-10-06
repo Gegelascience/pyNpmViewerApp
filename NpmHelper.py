@@ -13,13 +13,21 @@ class NpmWrapper:
 
             possibleData = rawResponse.json()
             if len(possibleData) > 0:
-                print(possibleData)
+                return PackageDataInfo(possibleData)
         else:
             print("error", rawResponse.status)
+            return None
 
 
+class PackageDataInfo:
+
+    def __init__(self, rawData: dict):
+        print(rawData.keys())
+        self.name =  rawData["name"]
+        self.description= rawData["description"]
+        print(rawData["dist-tags"])
+        #self.version= rawData["versions"]
+        self.version= rawData["dist-tags"]["latest"]
+        self.author= rawData["author"]["name"]
 
 
-test = NpmWrapper()
-
-test.getPackageGeneralInfo("ngx-view360")
