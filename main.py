@@ -1,6 +1,6 @@
 from tkinter import Tk, ttk
 from tkinter import *
-from InfoPopup import InfoPackage
+from InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget
 
 
 class myApp(Tk):
@@ -11,32 +11,39 @@ class myApp(Tk):
         Tk.__init__(self)
         self.title("Npm package Informations")
 
-        self.geometry('600x100')
-        self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=1)
-        self.columnconfigure(2, weight=1)
+        self.geometry('600x800')
 
+        ttk.Label(self,text="Renseigner le nom du package").pack()
+        
         # ajout du champ formulaire
-        self.user = StringVar()
-        user_entry = ttk.Entry(self, width=20, textvariable=self.user)
-        user_entry.grid(
-            column=1,
-            row=0)
+        self.package = StringVar()
+        package_entry = ttk.Entry(self, width=20, textvariable=self.package)
+        package_entry.pack()
+        
+        ttk.Button(self, text="Rechercher", command=self.openInformationPopup).pack()
 
-        ttk.Label(self,text="Renseigner le nom du package").grid(
-            column=0,
-            row=0)
 
-        ttk.Button(self, text="Rechercher", command=self.openInformationPopup).grid(
-            column=2,
-            row=0)
+        tabControl = ttk.Notebook(self)
+  
+        self.tabInfo = ttk.Frame(tabControl)
+        self.tabDownload = ttk.Frame(tabControl)
 
+        tabControl.add(self.tabInfo, text ='Informations')
+        tabControl.add(self.tabDownload, text ='Téléchargement')
+        tabControl.pack(expand = 1, fill ="both")
+
+        package_entry.focus()
 
     def openInformationPopup(self):
-        packageName = self.user.get()
-        InfoPackage(self, packageName)
+        packageName = self.package.get()
+        for child in self.tabInfo.winfo_children():
+            child.destroy()
+        InfoPackageWidget(self.tabInfo, packageName).pack()
+
+        for child in self.tabDownload.winfo_children():
+            child.destroy()
+        GraphDownloadsWidget(self.tabDownload, packageName).pack()
+
 
 
 	
