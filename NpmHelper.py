@@ -57,7 +57,8 @@ class PackageDataInfo:
         self.license:str = rawData["license"]
         self.keywords:str = ", ".join(rawData["keywords"])
 
-        self.createdDate:str = rawData["time"]["created"]
+        createdDatetime =datetime.strptime(rawData["time"]["created"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        self.createdDate:str = createdDatetime.strftime("%d/%m/%Y")
 
         self.readmeLines: list = rawData["readme"].split("\r\n")
 
