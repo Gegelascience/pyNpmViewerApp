@@ -49,12 +49,15 @@ class PackageDataInfo:
 
     def __init__(self, rawData: dict):
         #print(rawData.keys())
+        #print(rawData["time"])
         self.name:str =  rawData["name"]
         self.description:str= rawData["description"]
         self.version:str = rawData["dist-tags"]["latest"]
         self.author:str = rawData["author"]["name"]
         self.license:str = rawData["license"]
         self.keywords:str = ", ".join(rawData["keywords"])
+
+        self.createdDate:str = rawData["time"]["created"]
 
         self.readmeLines: list = rawData["readme"].split("\r\n")
 

@@ -24,6 +24,7 @@ class InfoPackageWidget(Frame):
             ttk.Label(self,text="Mots clés: " + dataToShow.keywords).pack()
             ttk.Label(self,text="Auteur: " + dataToShow.author).pack()
             ttk.Label(self,text="Dernière version: " + dataToShow.version).pack()
+            ttk.Label(self,text="Date de création: " + dataToShow.createdDate).pack()
             ttk.Label(self,text="Licence: " + dataToShow.license).pack()
             
 
