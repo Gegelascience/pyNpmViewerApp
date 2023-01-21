@@ -1,15 +1,13 @@
 from tkinter import Tk, ttk
 from tkinter import *
 from InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget
-
+from NpmHelper import NpmWrapper
 
 class myApp(Tk):
 
-
-
     def __init__(self):
         Tk.__init__(self)
-        self.title("Npm package Informations")
+        self.title("Informations Package NPM")
 
         self.geometry('600x800')
 
@@ -20,7 +18,7 @@ class myApp(Tk):
         package_entry = ttk.Entry(self, width=20, textvariable=self.package)
         package_entry.pack()
         
-        ttk.Button(self, text="Rechercher", command=self.openInformationPopup).pack()
+        ttk.Button(self, text="Rechercher", command=self.showInformation).pack()
 
 
         tabControl = ttk.Notebook(self)
@@ -34,17 +32,29 @@ class myApp(Tk):
 
         package_entry.focus()
 
-    def openInformationPopup(self):
+    def showInformation(self):
         packageName = self.package.get()
-        for child in self.tabInfo.winfo_children():
-            child.destroy()
-        InfoPackageWidget(self.tabInfo, packageName).pack()
 
-        for child in self.tabDownload.winfo_children():
-            child.destroy()
-        GraphDownloadsWidget(self.tabDownload, packageName).pack()
+        npmInfoClient = NpmWrapper()
+        dataToShow = npmInfoClient.getPackageGeneralInfo(packageName)
+        if not dataToShow:
+            ErrorPopup(self)
+        else:
+            for child in self.tabInfo.winfo_children():
+                child.destroy()
+            InfoPackageWidget(self.tabInfo, dataToShow).pack()
+
+            for child in self.tabDownload.winfo_children():
+                child.destroy()
+            GraphDownloadsWidget(self.tabDownload, dataToShow).pack()
 
 
+class ErrorPopup(Toplevel):
+    def __init__(self, parent):
+        Toplevel.__init__(self, parent)
+        self.title("ERREUR")
+        self.geometry('150x50')
+        ttk.Label(self,text="Une erreur est survenue").pack()
 
 	
 
