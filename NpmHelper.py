@@ -16,7 +16,7 @@ class NpmWrapper:
             if len(possibleData) > 0:
                 return PackageDataInfo(possibleData)
         else:
-            print("error", rawResponse.status)
+            print("error infos", rawResponse.status, rawResponse.body)
             return None
 
     def getLast30daysDownload(self, packageName:str):
@@ -29,7 +29,7 @@ class NpmWrapper:
             if len(possibleData) > 0:
                 return PackageDownloadInfo(possibleData)
         else:
-            print("error", rawResponse.status)
+            print("error 30", rawResponse.status, rawResponse.body)
             return None
 
     def getLast7daysDownload(self, packageName:str):
@@ -42,7 +42,7 @@ class NpmWrapper:
             if len(possibleData) > 0:
                 return PackageDownloadInfo(possibleData)
         else:
-            print("error", rawResponse.status)
+            print("error 7 days", rawResponse.status, rawResponse.body)
             return None
 
     def getDownloadBetween2Date(self, packageName:str,startPeriod:datetime, endPeriod:datetime):
@@ -53,20 +53,24 @@ class NpmWrapper:
             if len(possibleData) > 0:
                 return PackageDownloadInfo(possibleData)
         else:
-            print("error", rawResponse.status)
+            print("error between", rawResponse.status, rawResponse.body)
             return None
 
 class PackageDataInfo:
 
     def __init__(self, rawData: dict):
-        #print(rawData.keys())
-        #print(rawData["time"])
+        #print(rawData)
+        print(rawData.keys())
+        
         self.name:str =  rawData["name"]
-        self.description:str= rawData["description"]
+        self.description:str= rawData.get("description","")
         self.version:str = rawData["dist-tags"]["latest"]
-        self.author:str = rawData["author"]["name"]
+        if rawData.get("author"):
+            self.author:str = rawData["author"]["name"]
+        else:
+           self.author:str = "" 
         self.license:str = rawData["license"]
-        self.keywords:str = ", ".join(rawData["keywords"])
+        self.keywords:str = ", ".join(rawData.get("keywords",""))
 
         createdDatetime =datetime.strptime(rawData["time"]["created"],"%Y-%m-%dT%H:%M:%S.%fZ")
         self.createdDate:str = createdDatetime.strftime("%d/%m/%Y")

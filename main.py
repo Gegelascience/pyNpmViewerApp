@@ -27,7 +27,7 @@ class myApp(Tk):
         self.tabDownload = ttk.Frame(tabControl)
 
         tabControl.add(self.tabInfo, text ='Informations')
-        tabControl.add(self.tabDownload, text ='Téléchargement')
+        tabControl.add(self.tabDownload, text ='Téléchargements')
         tabControl.pack(expand = 1, fill ="both")
 
         package_entry.focus()

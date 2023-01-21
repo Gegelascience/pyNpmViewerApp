@@ -26,14 +26,42 @@ class InfoPackageWidget(Frame):
     def __init__(self,parent, packageInfo:PackageDataInfo):
         Frame.__init__(self, parent)
 
-        ttk.Label(self,text="Nom: " + packageInfo.name).pack()
-        ttk.Label(self,text="Description: " + packageInfo.description).pack()
-        ttk.Label(self,text="Mots clés: " + packageInfo.keywords).pack()
-        ttk.Label(self,text="Auteur: " + packageInfo.author).pack()
-        ttk.Label(self,text="Dernière version: " + packageInfo.version).pack()
-        ttk.Label(self,text="Date de création: " + packageInfo.createdDate).pack()
-        ttk.Label(self,text="Licence: " + packageInfo.license).pack()
-            
+        
+        ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
+
+        generalDataContainer = Frame(self)
+
+        generalDataFrameLeft =Frame(generalDataContainer)
+        columnLabel = Frame(generalDataFrameLeft)
+
+        ttk.Label(columnLabel,text="Auteur: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Dernière version: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Licence: ").pack(anchor="w")
+
+        columnValue = Frame(generalDataFrameLeft)
+        ttk.Label(columnValue,text=packageInfo.author).pack(anchor="w")
+        ttk.Label(columnValue,text=packageInfo.createdDate).pack(anchor="w")
+        ttk.Label(columnValue,text=packageInfo.version).pack(anchor="w")
+        ttk.Label(columnValue,text=packageInfo.license).pack(anchor="w")
+        
+        columnLabel.pack(side=LEFT)
+        columnValue.pack()
+        generalDataFrameLeft.pack(side=LEFT)
+
+
+        generalDataFrameRight = Frame(generalDataContainer)
+        ttk.Label(generalDataFrameRight,text="Description: ").pack()
+        ttk.Label(generalDataFrameRight,text=packageInfo.description).pack()
+        ttk.Label(generalDataFrameRight,text="Mots clés: ").pack()
+        ttk.Label(generalDataFrameRight,text=packageInfo.keywords).pack()
+
+        generalDataFrameRight.pack()
+
+        generalDataContainer.pack()
+
+
+
 
         scrollbarReadme=Scrollbar(self,orient="vertical")
         scrollbarReadme.pack(side="right",fill="y")
@@ -74,7 +102,7 @@ class GraphDownloadsWidget(Frame):
                 nbTotalDownload += sum(downloadTmp.downloads)
 
 
-        ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack()
+        ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack(pady=(0,50))
 
 
         # get last 7 days graph
