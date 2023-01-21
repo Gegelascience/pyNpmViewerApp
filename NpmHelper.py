@@ -45,6 +45,17 @@ class NpmWrapper:
             print("error", rawResponse.status)
             return None
 
+    def getDownloadBetween2Date(self, packageName:str,startPeriod:datetime, endPeriod:datetime):
+        rawResponse = requestWrapper(self._baseUrlDownloadCount + startPeriod.strftime("%Y-%m-%d") + ":" + endPeriod.strftime("%Y-%m-%d") + "/" + packageName)
+        if rawResponse.status == 200:
+
+            possibleData = rawResponse.json()
+            if len(possibleData) > 0:
+                return PackageDownloadInfo(possibleData)
+        else:
+            print("error", rawResponse.status)
+            return None
+
 class PackageDataInfo:
 
     def __init__(self, rawData: dict):

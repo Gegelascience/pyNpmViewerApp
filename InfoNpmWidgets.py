@@ -1,6 +1,24 @@
 from tkinter import *
 from tkinter import ttk, Toplevel
 from NpmHelper import NpmWrapper
+from datetime import datetime
+
+
+def getListIntervalOneYearNpm(start:datetime,end:datetime) -> list:
+    listInterval = []
+
+    indexDate = start
+    indexYear = start.year
+    while indexYear != end.year:
+        lastDayOfYear = datetime.strptime("31/12/" + str(indexYear),"%d/%m/%Y")
+        listInterval.append({"start":indexDate, "end":lastDayOfYear})
+        indexYear+=1
+        indexDate = datetime.strptime("01/01/" + str(indexYear),"%d/%m/%Y")
+    
+    #annee de fin
+    listInterval.append({"start":indexDate, "end":end})
+    
+    return listInterval
 
 
 class InfoPackageWidget(Frame):
@@ -49,12 +67,33 @@ class GraphDownloadsWidget(Frame):
         self.infoError = StringVar()
         ttk.Label(self, textvariable=self.infoError).pack()
 
+        ttk.Label(self,text="Nom: " + packageName).pack()
+
+
+        nbTotalDownload = 0
+
         npmInfoClient = NpmWrapper()
+        dataToShow = npmInfoClient.getPackageGeneralInfo(packageName)
+        if dataToShow:
+            now = datetime.now()
+            createdAt = datetime.strptime(dataToShow.createdDate,"%d/%m/%Y")
+
+            listInterval =getListIntervalOneYearNpm(createdAt,now)
+            downloadByYear = []
+            for interval in listInterval:
+                downloadTmp = npmInfoClient.getDownloadBetween2Date(packageName,interval.get("start"), interval.get("end"))
+                if downloadTmp:
+                    nbTotalDownload += sum(downloadTmp.downloads)
+
+
+        ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack()
+
+
+        # get last 7 days graph
         listDownloads = npmInfoClient.getLast7daysDownload(packageName)
         if not listDownloads:
             self.infoError.set("Impossible de trouver des infos sur " + packageName)
         else:
-            ttk.Label(self,text="Nom: " + listDownloads.name).pack()
 
             maxValue = max(listDownloads.downloads)
 
