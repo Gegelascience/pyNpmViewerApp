@@ -2,8 +2,10 @@ from tkinter import Tk, ttk
 from tkinter import *
 from InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget
 from NpmHelper import NpmWrapper
+from threading import Thread
+from datetime import datetime
 
-class myApp(Tk):
+class MyApp(Tk):
 
     def __init__(self):
         Tk.__init__(self)
@@ -34,19 +36,24 @@ class myApp(Tk):
 
     def showInformation(self):
         packageName = self.package.get()
+        npmThread = GetNpmDataThread(self,packageName)
+        npmThread.start()
 
-        npmInfoClient = NpmWrapper()
-        dataToShow = npmInfoClient.getPackageGeneralInfo(packageName)
-        if not dataToShow:
-            ErrorPopup(self)
-        else:
-            for child in self.tabInfo.winfo_children():
-                child.destroy()
-            InfoPackageWidget(self.tabInfo, dataToShow).pack()
+    def updateGeneralInfoTab(self, dataFromNpm):
+        for child in self.tabInfo.winfo_children():
+            child.destroy()
+        InfoPackageWidget(self.tabInfo, dataFromNpm).pack()
 
-            for child in self.tabDownload.winfo_children():
-                child.destroy()
-            GraphDownloadsWidget(self.tabDownload, dataToShow).pack()
+    def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays):
+
+        for child in self.tabDownload.winfo_children():
+            child.destroy()
+        GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays).pack()	
+
+    def showPopuError(self):
+        ErrorPopup(self)
+
+        
 
 
 class ErrorPopup(Toplevel):
@@ -56,8 +63,37 @@ class ErrorPopup(Toplevel):
         self.geometry('150x50')
         ttk.Label(self,text="Une erreur est survenue").pack()
 
-	
+
+class GetNpmDataThread(Thread):
+    def __init__(self, app2Update:MyApp,npmPackage:str ):
+        Thread.__init__(self)
+        self.gui = app2Update
+        self.packageName =npmPackage
+
+
+    def run(self):
+        npmInfoClient = NpmWrapper()
+        dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
+        if not dataToShow:
+            self.gui.after(0,self.gui.showPopuError())
+        else:
+            self.gui.after(0, self.gui.updateGeneralInfoTab(dataToShow))
+            now = datetime.now()
+            createdAt = datetime.strptime(dataToShow.createdDate,"%d/%m/%Y")
+
+            nbTotalDownload = 0
+            listInterval =NpmWrapper.getListIntervalOneYearNpm(createdAt,now)
+            for interval in listInterval:
+                downloadTmp = npmInfoClient.getDownloadBetween2Date(dataToShow.name,interval.get("start"), interval.get("end"))
+                if downloadTmp:
+                    nbTotalDownload += sum(downloadTmp.downloads)
+
+            # get last 7 days graph
+            listDownloads = npmInfoClient.getLast7daysDownload(dataToShow.name)
+
+            self.gui.after(0, self.gui.updateDownloadInfoTab(dataToShow,nbTotalDownload,listDownloads))
+        
 
 if __name__ == "__main__":
-	app = myApp()
+	app = MyApp()
 	app.mainloop()

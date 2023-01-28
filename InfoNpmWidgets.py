@@ -1,25 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from NpmHelper import NpmWrapper, PackageDataInfo
-from datetime import datetime
-
-
-def getListIntervalOneYearNpm(start:datetime,end:datetime) -> list:
-    listInterval = []
-
-    indexDate = start
-    indexYear = start.year
-    while indexYear != end.year:
-        lastDayOfYear = datetime.strptime("31/12/" + str(indexYear),"%d/%m/%Y")
-        listInterval.append({"start":indexDate, "end":lastDayOfYear})
-        indexYear+=1
-        indexDate = datetime.strptime("01/01/" + str(indexYear),"%d/%m/%Y")
-    
-    #annee de fin
-    listInterval.append({"start":indexDate, "end":end})
-    
-    return listInterval
-
+from NpmHelper import PackageDataInfo
 
 class InfoPackageWidget(Frame):
 
@@ -77,7 +58,7 @@ class InfoPackageWidget(Frame):
 
 
 class GraphDownloadsWidget(Frame):
-    def __init__(self,parent, packageInfo:PackageDataInfo):
+    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloads:list):
         Frame.__init__(self, parent)
 
         # retour etat traitement
@@ -86,27 +67,10 @@ class GraphDownloadsWidget(Frame):
 
         ttk.Label(self,text="Nom: " + packageInfo.name).pack()
 
-
-        nbTotalDownload = 0
-
-        npmInfoClient = NpmWrapper()
-
-        now = datetime.now()
-        createdAt = datetime.strptime(packageInfo.createdDate,"%d/%m/%Y")
-
-        listInterval =getListIntervalOneYearNpm(createdAt,now)
-        downloadByYear = []
-        for interval in listInterval:
-            downloadTmp = npmInfoClient.getDownloadBetween2Date(packageInfo.name,interval.get("start"), interval.get("end"))
-            if downloadTmp:
-                nbTotalDownload += sum(downloadTmp.downloads)
-
-
         ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack(pady=(0,50))
 
 
-        # get last 7 days graph
-        listDownloads = npmInfoClient.getLast7daysDownload(packageInfo.name)
+        
         if not listDownloads:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
         else:

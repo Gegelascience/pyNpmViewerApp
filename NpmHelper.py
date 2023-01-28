@@ -55,6 +55,23 @@ class NpmWrapper:
         else:
             print("error between", rawResponse.status, rawResponse.body)
             return None
+        
+
+    def getListIntervalOneYearNpm(start:datetime,end:datetime) -> list:
+        listInterval = []
+
+        indexDate = start
+        indexYear = start.year
+        while indexYear != end.year:
+            lastDayOfYear = datetime.strptime("31/12/" + str(indexYear),"%d/%m/%Y")
+            listInterval.append({"start":indexDate, "end":lastDayOfYear})
+            indexYear+=1
+            indexDate = datetime.strptime("01/01/" + str(indexYear),"%d/%m/%Y")
+    
+        #annee de fin
+        listInterval.append({"start":indexDate, "end":end})
+    
+        return listInterval
 
 class PackageDataInfo:
 
