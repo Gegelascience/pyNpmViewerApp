@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from NpmHelper import PackageDataInfo
+from Helpers.NpmHelper import PackageDataInfo
 
 class InfoPackageWidget(Frame):
 
