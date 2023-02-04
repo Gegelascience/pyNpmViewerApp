@@ -1,1 +1,2 @@
 from .testNpmHelper import NpmHelperTestCase
+from .testHttpClient import HttpClientTestCase

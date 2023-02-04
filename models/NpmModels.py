@@ -4,7 +4,6 @@ class PackageDataInfo:
 
     def __init__(self, rawData: dict):
         #print(rawData)
-        print(rawData.keys())
         
         self.name:str =  rawData["name"]
         self.description:str= rawData.get("description","")

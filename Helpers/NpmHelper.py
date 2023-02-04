@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from Helpers.RestClient import requestWrapper
+from Helpers.HttpClient import requestWrapper
 from models.NpmModels import PackageDataInfo, PackageDownloadInfo
 
 
