@@ -7,10 +7,16 @@ from email.message import Message
 
 
 class ResponseWrapper(typing.NamedTuple):
-    body: str
+    body: bytes | str
     headers: Message
     status: int
     error_count: int = 0
+
+    def text(self) -> str:
+        if not isinstance(self.body,str):
+            return self.body.decode(self.headers.get_content_charset("utf-8"))
+        else:
+            return self.body
 
     def json(self) -> typing.Any:
         """
@@ -19,8 +25,9 @@ class ResponseWrapper(typing.NamedTuple):
         Returns:
             Pythonic representation of the JSON object
         """
+        bodyToParse = self.text()
         try:
-            output = json.loads(self.body)
+            output = json.loads(bodyToParse)
         except json.JSONDecodeError:
             output = ""
         return output
@@ -65,7 +72,7 @@ def requestWrapper(
             response = ResponseWrapper(
                 headers=httpresponse.headers,
                 status=httpresponse.status,
-                body=httpresponse.read().decode(httpresponse.headers.get_content_charset("utf-8")),
+                body=httpresponse.read(),
             )
     except urllib.error.HTTPError as e:
         response = ResponseWrapper(
