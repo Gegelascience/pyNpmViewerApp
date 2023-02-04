@@ -5,7 +5,7 @@ from Helpers.NpmHelper import PackageDataInfo
 class InfoPackageWidget(Frame):
 
     def __init__(self,parent, packageInfo:PackageDataInfo):
-        Frame.__init__(self, parent)
+        super().__init__(parent)
 
         
         ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
@@ -59,7 +59,7 @@ class InfoPackageWidget(Frame):
 
 class GraphDownloadsWidget(Frame):
     def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloads:list):
-        Frame.__init__(self, parent)
+        super().__init__(parent)
 
         # retour etat traitement
         self.infoError = StringVar()

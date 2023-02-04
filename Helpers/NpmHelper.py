@@ -3,7 +3,7 @@ from Helpers.RestClient import requestWrapper
 from models.NpmModels import PackageDataInfo, PackageDownloadInfo
 
 
-class NpmWrapper:
+class NpmHelper:
 
     _baseUrlInfo: str = "https://registry.npmjs.org/"
     _baseUrlDownloadCount: str = "https://api.npmjs.org/downloads/range/"

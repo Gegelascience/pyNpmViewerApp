@@ -8,9 +8,9 @@ from controllers.DataNpmController import GetNpmDataThread
 class MyApp(Tk):
 
     def __init__(self):
-        Tk.__init__(self)
+        super().__init__()
+        
         self.title("Informations Package NPM")
-
         self.geometry('600x800')
 
         ttk.Label(self,text="Renseigner le nom du package").pack()
@@ -36,8 +36,9 @@ class MyApp(Tk):
 
     def showInformation(self):
         packageName = self.package.get()
-        npmThread = GetNpmDataThread(self,packageName)
-        npmThread.start()
+        if len(packageName) > 0 :
+            npmThread = GetNpmDataThread(self,packageName)
+            npmThread.start()
 
     def updateGeneralInfoTab(self, dataFromNpm):
         for child in self.tabInfo.winfo_children():
@@ -58,7 +59,7 @@ class MyApp(Tk):
 
 class ErrorPopup(Toplevel):
     def __init__(self, parent):
-        Toplevel.__init__(self, parent)
+        super().__init__(parent)
         self.title("ERREUR")
         self.geometry('150x50')
         ttk.Label(self,text="Une erreur est survenue").pack()

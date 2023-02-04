@@ -1,4 +1,4 @@
-from Helpers.NpmHelper import NpmWrapper
+from Helpers.NpmHelper import NpmHelper
 from threading import Thread
 from datetime import datetime
 
@@ -12,13 +12,13 @@ if TYPE_CHECKING:
 
 class GetNpmDataThread(Thread):
     def __init__(self, app2Update:"MyApp",npmPackage:str ):
-        Thread.__init__(self)
+        super().__init__()
         self.gui = app2Update
         self.packageName =npmPackage
 
 
     def run(self):
-        npmInfoClient = NpmWrapper()
+        npmInfoClient = NpmHelper()
         dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
         if not dataToShow:
             self.gui.after(0,self.gui.showPopuError())
@@ -28,7 +28,7 @@ class GetNpmDataThread(Thread):
             createdAt = datetime.strptime(dataToShow.createdDate,"%d/%m/%Y")
 
             nbTotalDownload = 0
-            listInterval =NpmWrapper.getListIntervalOneYearNpm(createdAt,now)
+            listInterval =NpmHelper.getListIntervalOneYearNpm(createdAt,now)
             for interval in listInterval:
                 downloadTmp = npmInfoClient.getDownloadBetween2Date(dataToShow.name,interval.get("start"), interval.get("end"))
                 if downloadTmp:

@@ -58,18 +58,14 @@ def requestWrapper(
         else:
             request_data = urllib.parse.urlencode(data).encode()
 
-    httprequest = urllib.request.Request(
-        url, data=request_data, headers=headers, method=method
-    )
+    httprequest = urllib.request.Request(url, data=request_data, headers=headers, method=method)
 
     try:
         with urllib.request.urlopen(httprequest) as httpresponse:
             response = ResponseWrapper(
                 headers=httpresponse.headers,
                 status=httpresponse.status,
-                body=httpresponse.read().decode(
-                    httpresponse.headers.get_content_charset("utf-8")
-                ),
+                body=httpresponse.read().decode(httpresponse.headers.get_content_charset("utf-8")),
             )
     except urllib.error.HTTPError as e:
         response = ResponseWrapper(
