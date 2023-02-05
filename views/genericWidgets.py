@@ -33,4 +33,4 @@ class LoaderFrame(Frame):
         item=self.loaderIcon.create_rectangle(xPoint, yPoint, xPoint+length, yPoint+length, fill='red', outline='')
         self.zoneLoader+=1
 
-        self.after(1000, self.updateLoader,item)
+        self.after(500, self.updateLoader,item)
