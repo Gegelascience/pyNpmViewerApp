@@ -51,10 +51,10 @@ class MyApp(Tk):
             child.destroy()
         InfoPackageWidget(self.tabInfo, dataFromNpm).pack()
 
-    def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays):
+    def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays,listDownloadsThirty):
         for child in self.tabDownload.winfo_children():
             child.destroy()
-        GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays).pack()	
+        GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays,listDownloadsThirty).pack()	
 
     def showPopuError(self):
         ErrorPopup(self)

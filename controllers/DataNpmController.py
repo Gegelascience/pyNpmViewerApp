@@ -35,6 +35,8 @@ class GetNpmDataThread(Thread):
                     nbTotalDownload += sum(downloadTmp.downloads)
 
             # get last 7 days graph
-            listDownloads = npmInfoClient.getLast7daysDownload(dataToShow.name)
+            listDownloadsSeven = npmInfoClient.getLast7daysDownload(dataToShow.name)
 
-            self.gui.after(0, self.gui.updateDownloadInfoTab(dataToShow,nbTotalDownload,listDownloads))
+            listDownloadsThirty = npmInfoClient.getLast30daysDownload(dataToShow.name)
+
+            self.gui.after(0, self.gui.updateDownloadInfoTab(dataToShow,nbTotalDownload,listDownloadsSeven,listDownloadsThirty))

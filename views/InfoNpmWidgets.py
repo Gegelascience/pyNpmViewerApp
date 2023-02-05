@@ -58,7 +58,7 @@ class InfoPackageWidget(Frame):
 
 
 class GraphDownloadsWidget(Frame):
-    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloads:list):
+    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:list, listDownloadsThirty:list):
         super().__init__(parent)
 
         # retour etat traitement
@@ -71,19 +71,32 @@ class GraphDownloadsWidget(Frame):
 
 
         
-        if not listDownloads:
+        if not listDownloadsSeven and not listDownloadsThirty:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
-        else:
-
-            maxValue = max(listDownloads.downloads)
+        
+        if listDownloadsSeven:
+            maxValue = max(listDownloadsSeven.downloads)
 
             ttk.Label(self,text="7 derniers jours").pack()
-            graph = Canvas(self,height=120,width=400, background="white")
-            graph.pack(side=LEFT,fill=X)
+            graph = Canvas(self,height=120,width=425, background="white")
+            graph.pack(fill=X,pady=(0,50))
             
-            for i,dayStat in enumerate(listDownloads.downloads):
-                graph.create_text(i*50 + 5,10,text=dayStat)
-                graph.create_line(i*50 + 5, 20+(maxValue-dayStat)*100/maxValue, i*50 + 5, 120,width=3, fill="red")
+            for i,dayStat in enumerate(listDownloadsSeven.downloads):
+                graph.create_text(i*51 + 5,10,text=dayStat)
+                if i > 0:
+                    graph.create_line((i-1)*51 + 5, 20+(maxValue-listDownloadsSeven.downloads[i-1])*100/maxValue, i*51 + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
 
+
+        if listDownloadsThirty:
+            maxValue = max(listDownloadsThirty.downloads)
+
+            ttk.Label(self,text="30 derniers jours").pack()
+            graph = Canvas(self,height=120,width=425, background="white")
+            graph.pack(fill=X)
+            
+            for i,dayStat in enumerate(listDownloadsThirty.downloads):
+                graph.create_text(i*14 + 5,10,text=dayStat)
+                if i > 0:
+                    graph.create_line((i-1)*14 + 5, 20+(maxValue-listDownloadsThirty.downloads[i-1])*100/maxValue, i*14 + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
             
 
