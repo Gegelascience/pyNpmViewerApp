@@ -24,8 +24,9 @@ class MyApp(Tk):
         package_entry = ttk.Entry(self, width=20, textvariable=self.package)
         package_entry.pack()
         
-        ttk.Button(self, text="Rechercher", command=self.showInformation).pack()
-
+        btnSearch = ttk.Button(self, text="Rechercher", command=self.showInformation)
+        btnSearch.bind('<Return>', self.showInformation)
+        btnSearch.pack()
 
         tabControl = ttk.Notebook(self)
   
@@ -38,7 +39,7 @@ class MyApp(Tk):
 
         package_entry.focus()
 
-    def showInformation(self):
+    def showInformation(self, event=None):
         packageName = self.package.get()
         if len(packageName) > 0 :
             npmThread = GetNpmDataThread(self,packageName)
