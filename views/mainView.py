@@ -2,8 +2,12 @@ from tkinter import Tk, ttk
 from tkinter import *
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget
 from controllers.DataNpmController import GetNpmDataThread
+from views.genericWidgets import ErrorPopup, LoaderFrame
 
-
+def addLoader(parentFrame: Frame):
+    for child in parentFrame.winfo_children():
+        child.destroy()
+    LoaderFrame(parentFrame).pack()
 
 class MyApp(Tk):
 
@@ -38,6 +42,8 @@ class MyApp(Tk):
         packageName = self.package.get()
         if len(packageName) > 0 :
             npmThread = GetNpmDataThread(self,packageName)
+            addLoader(self.tabInfo)
+            addLoader(self.tabDownload)
             npmThread.start()
 
     def updateGeneralInfoTab(self, dataFromNpm):
@@ -46,7 +52,6 @@ class MyApp(Tk):
         InfoPackageWidget(self.tabInfo, dataFromNpm).pack()
 
     def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays):
-
         for child in self.tabDownload.winfo_children():
             child.destroy()
         GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays).pack()	
@@ -57,9 +62,3 @@ class MyApp(Tk):
         
 
 
-class ErrorPopup(Toplevel):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.title("ERREUR")
-        self.geometry('150x50')
-        ttk.Label(self,text="Une erreur est survenue").pack()
