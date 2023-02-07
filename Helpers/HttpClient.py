@@ -4,6 +4,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from email.message import Message
+import base64
 
 
 class ResponseWrapper(typing.NamedTuple):
@@ -33,13 +34,31 @@ class ResponseWrapper(typing.NamedTuple):
         return output
 
 
+def getBasicAuthorizationToken(user:str,mdp:str)-> str:
+    # ajout de l'authentification
+    baseAuthCred = user + "/token:" + mdp
+    baseAuthByte = baseAuthCred.encode('utf-8')
+    nearlyOk = base64.encodebytes(baseAuthByte)
+
+    # on découpe la chaine binaire suivant le caractère binaire equivalent au \n
+    listOk = nearlyOk.split(b'\n')
+	
+    # on recupère le token au format binaire
+    base64Cred=b''
+    for elem in listOk:
+        base64Cred = base64Cred + elem
+
+    base64string = base64Cred.decode('utf-8')
+    return base64string
+
+
 def requestWrapper(
     url: str,
     data: dict = None,
     params: dict = None,
     headers: dict = None,
     method: str = "GET",
-    data_as_json: bool = True,
+    dataType: str = "json",
     error_count: int = 0,
 ) -> ResponseWrapper:
     if not url.casefold().startswith("http"):
@@ -59,9 +78,15 @@ def requestWrapper(
         url += "?" + urllib.parse.urlencode(params, doseq=True, safe="/")
 
     if data:
-        if data_as_json:
-            request_data = json.dumps(data).encode()
-            headers["Content-Type"] = "application/json; charset=UTF-8"
+        if dataType:
+            dataType = dataType.lower()
+            if  dataType =="json":
+                request_data = json.dumps(data).encode()
+                headers["Content-Type"] = "application/json; charset=UTF-8"
+            elif dataType =="binary":
+                request_data = data
+            else:
+               request_data = urllib.parse.urlencode(data).encode() 
         else:
             request_data = urllib.parse.urlencode(data).encode()
 
