@@ -1,12 +1,14 @@
 from tkinter import *
 from tkinter import ttk
 from Helpers.NpmHelper import PackageDataInfo
+import webbrowser
 
 class InfoPackageWidget(Frame):
 
     def __init__(self,parent, packageInfo:PackageDataInfo):
         super().__init__(parent)
 
+        self.data = packageInfo
         
         ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
 
@@ -41,8 +43,19 @@ class InfoPackageWidget(Frame):
 
         generalDataContainer.pack()
 
+        btnAccesNpmPage = ttk.Button(self, text="Accès page npm", command=self.openNpmPage)
+        btnAccesNpmPage.pack()
+
+    def openNpmPage(self):
+        webbrowser.open_new_tab("https://www.npmjs.com/package/" + self.data.name)
 
 
+class ReadMeViewerWidget(Frame):
+
+    def __init__(self,parent,packageInfo:PackageDataInfo):
+        super().__init__(parent)
+
+        ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
 
         scrollbarReadme=Scrollbar(self,orient="vertical")
         scrollbarReadme.pack(side="right",fill="y")
@@ -54,7 +67,7 @@ class InfoPackageWidget(Frame):
 
         readmeLinesContainer.pack(side = LEFT, fill = BOTH )
 
-        scrollbarReadme.config( command = readmeLinesContainer.yview )
+        scrollbarReadme.config( command = readmeLinesContainer.yview)
 
 
 class GraphDownloadsWidget(Frame):

@@ -1,6 +1,6 @@
 from tkinter import Tk, ttk
 from tkinter import *
-from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget
+from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
 
@@ -31,9 +31,11 @@ class MyApp(Tk):
         tabControl = ttk.Notebook(self)
   
         self.tabInfo = ttk.Frame(tabControl)
+        self.tabReadMe = ttk.Frame(tabControl)
         self.tabDownload = ttk.Frame(tabControl)
 
         tabControl.add(self.tabInfo, text ='Informations')
+        tabControl.add(self.tabReadMe, text ='ReadMe')
         tabControl.add(self.tabDownload, text ='Téléchargements')
         tabControl.pack(expand = 1, fill ="both")
 
@@ -44,6 +46,7 @@ class MyApp(Tk):
         if len(packageName) > 0 :
             npmThread = GetNpmDataThread(self,packageName)
             addLoader(self.tabInfo)
+            addLoader(self.tabReadMe)
             addLoader(self.tabDownload)
             npmThread.start()
 
@@ -51,6 +54,9 @@ class MyApp(Tk):
         for child in self.tabInfo.winfo_children():
             child.destroy()
         InfoPackageWidget(self.tabInfo, dataFromNpm).pack()
+        for child in self.tabReadMe.winfo_children():
+            child.destroy()
+        ReadMeViewerWidget(self.tabReadMe, dataFromNpm).pack()
 
     def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays,listDownloadsThirty):
         for child in self.tabDownload.winfo_children():
