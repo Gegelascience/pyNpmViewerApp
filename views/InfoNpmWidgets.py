@@ -4,13 +4,14 @@ from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
 
 class InfoPackageWidget(Frame):
+    data:PackageDataInfo
 
     def __init__(self,parent, packageInfo:PackageDataInfo):
         super().__init__(parent)
 
         self.data = packageInfo
         
-        ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
+        ttk.Label(self,text= self.data.name).pack(pady=(20,0))
 
         generalDataContainer = Frame(self)
 
@@ -23,10 +24,10 @@ class InfoPackageWidget(Frame):
         ttk.Label(columnLabel,text="Licence: ").pack(anchor="w")
 
         columnValue = Frame(generalDataFrameLeft)
-        ttk.Label(columnValue,text=packageInfo.author).pack(anchor="w")
-        ttk.Label(columnValue,text=packageInfo.createdDate).pack(anchor="w")
-        ttk.Label(columnValue,text=packageInfo.version).pack(anchor="w")
-        ttk.Label(columnValue,text=packageInfo.license).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.author).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.license).pack(anchor="w")
         
         columnLabel.pack(side=LEFT)
         columnValue.pack()
@@ -35,15 +36,16 @@ class InfoPackageWidget(Frame):
 
         generalDataFrameRight = Frame(generalDataContainer)
         ttk.Label(generalDataFrameRight,text="Description: ").pack()
-        ttk.Label(generalDataFrameRight,text=packageInfo.description).pack()
+        ttk.Label(generalDataFrameRight,text=self.data.description).pack()
         ttk.Label(generalDataFrameRight,text="Mots clés: ").pack()
-        ttk.Label(generalDataFrameRight,text=packageInfo.keywords).pack()
+        ttk.Label(generalDataFrameRight,text=self.data.keywords).pack()
 
         generalDataFrameRight.pack()
 
         generalDataContainer.pack()
 
         btnAccesNpmPage = ttk.Button(self, text="Accès page npm", command=self.openNpmPage)
+        btnAccesNpmPage.bind('<Return>', self.openNpmPage)
         btnAccesNpmPage.pack()
 
     def openNpmPage(self):
