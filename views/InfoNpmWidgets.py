@@ -15,32 +15,27 @@ class InfoPackageWidget(Frame):
 
         generalDataContainer = Frame(self)
 
-        generalDataFrameLeft =Frame(generalDataContainer)
-        columnLabel = Frame(generalDataFrameLeft)
+        columnLabel = Frame(generalDataContainer)
 
         ttk.Label(columnLabel,text="Auteur: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Dernière version: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Licence: ").pack(anchor="w")
 
-        columnValue = Frame(generalDataFrameLeft)
+        ttk.Label(columnLabel,text="Description: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
+
+        columnValue = Frame(generalDataContainer)
         ttk.Label(columnValue,text=self.data.author).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.license).pack(anchor="w")
         
+        ttk.Label(columnValue,text=self.data.description).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.keywords).pack(anchor="w")
+        
         columnLabel.pack(side=LEFT)
         columnValue.pack()
-        generalDataFrameLeft.pack(side=LEFT)
-
-
-        generalDataFrameRight = Frame(generalDataContainer)
-        ttk.Label(generalDataFrameRight,text="Description: ").pack()
-        ttk.Label(generalDataFrameRight,text=self.data.description).pack()
-        ttk.Label(generalDataFrameRight,text="Mots clés: ").pack()
-        ttk.Label(generalDataFrameRight,text=self.data.keywords).pack()
-
-        generalDataFrameRight.pack()
 
         generalDataContainer.pack()
 
