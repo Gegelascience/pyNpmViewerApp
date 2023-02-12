@@ -1,7 +1,8 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk,filedialog
 from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
+import csv
 
 class InfoPackageWidget(Frame):
     data:PackageDataInfo
@@ -68,6 +69,8 @@ class ReadMeViewerWidget(Frame):
 
 
 class GraphDownloadsWidget(Frame):
+    listData:list
+    
     def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:list, listDownloadsThirty:list):
         super().__init__(parent)
 
@@ -76,37 +79,46 @@ class GraphDownloadsWidget(Frame):
         ttk.Label(self, textvariable=self.infoError).pack()
 
         ttk.Label(self,text="Nom: " + packageInfo.name).pack()
-
         ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack(pady=(0,50))
-
 
         
         if not listDownloadsSeven and not listDownloadsThirty:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
         
         if listDownloadsSeven:
-            maxValue = max(listDownloadsSeven.downloads)
-
-            ttk.Label(self,text="7 derniers jours").pack()
-            graph = Canvas(self,height=120,width=425, background="white")
-            graph.pack(fill=X,pady=(0,50))
-            
-            for i,dayStat in enumerate(listDownloadsSeven.downloads):
-                graph.create_text(i*51 + 5,10,text=dayStat)
-                if i > 0:
-                    graph.create_line((i-1)*51 + 5, 20+(maxValue-listDownloadsSeven.downloads[i-1])*100/maxValue, i*51 + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
-
+            self.drawDownloadGraph(listDownloadsSeven,51,"7 derniers jours",(0,50))
 
         if listDownloadsThirty:
-            maxValue = max(listDownloadsThirty.downloads)
+            self.drawDownloadGraph(listDownloadsThirty,14,"30 derniers jours")
+            self.listData = [{"Téléchagements":d} for d in listDownloadsThirty.downloads]
 
-            ttk.Label(self,text="30 derniers jours").pack()
-            graph = Canvas(self,height=120,width=425, background="white")
-            graph.pack(fill=X)
+            btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
+            btnReport.bind('<Return>', self.exportDownloadReport)
+            btnReport.pack()
+        
+
+    def drawDownloadGraph(self,listDownload:list, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):
+        maxValue = max(listDownload.downloads)
+        minValue = min(listDownload.downloads)
+
+        ttk.Label(self,text=graphTitle).pack()
+        graph = Canvas(self,height=120,width=425, background="white")
+        graph.pack(fill=X,pady=padding)
             
-            for i,dayStat in enumerate(listDownloadsThirty.downloads):
-                graph.create_text(i*14 + 5,10,text=dayStat)
-                if i > 0:
-                    graph.create_line((i-1)*14 + 5, 20+(maxValue-listDownloadsThirty.downloads[i-1])*100/maxValue, i*14 + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
+        for i,dayStat in enumerate(listDownload.downloads):
+            if dayStat in (minValue,maxValue):
+                graph.create_text(i*interValueSpace + 5,10,text=dayStat)
+            if i > 0:
+                graph.create_line((i-1)*interValueSpace + 5, 20+(maxValue-listDownload.downloads[i-1])*100/maxValue, i*interValueSpace + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
+
+
+    def exportDownloadReport(self):
+        targetFilename = filedialog.asksaveasfilename(filetypes=[("csv file","*.csv")], defaultextension=".csv",initialfile="downloadNpm.csv", title="Télécharger le rapport")
+        if targetFilename:
+            with open(targetFilename,mode="w", encoding='utf-8',newline='') as report:
+                dictWriter = csv.DictWriter(report,fieldnames=["Téléchagements"])
+                dictWriter.writeheader()
+                for row in self.listData:
+                    dictWriter.writerow(row)
             
 
