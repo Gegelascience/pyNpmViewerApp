@@ -5,11 +5,17 @@ from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
 
 def addLoader(parentFrame: Frame):
+    """
+    Add a loader Frame to a parent Frame
+    """
     for child in parentFrame.winfo_children():
         child.destroy()
     LoaderFrame(parentFrame).pack()
 
 class MyApp(Tk):
+    """
+    App Class
+    """
 
     def __init__(self):
         super().__init__()
@@ -59,11 +65,17 @@ class MyApp(Tk):
         ReadMeViewerWidget(self.tabReadMe, dataFromNpm).pack()
 
     def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays,listDownloadsThirty):
+        """
+        Show tab with package download informations
+        """
         for child in self.tabDownload.winfo_children():
             child.destroy()
         GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays,listDownloadsThirty).pack()	
 
-    def showPopuError(self):
+    def showPopupError(self):
+        """
+        Show error popup
+        """
         ErrorPopup(self)
 
         

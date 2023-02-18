@@ -5,6 +5,9 @@ import webbrowser
 import csv
 
 class InfoPackageWidget(Frame):
+    """
+    Frame to display general information on package
+    """
     data:PackageDataInfo
 
     def __init__(self,parent, packageInfo:PackageDataInfo):
@@ -45,10 +48,16 @@ class InfoPackageWidget(Frame):
         btnAccesNpmPage.pack()
 
     def openNpmPage(self):
+        """
+        Open npm package page on default browser
+        """
         webbrowser.open_new_tab("https://www.npmjs.com/package/" + self.data.name)
 
 
 class ReadMeViewerWidget(Frame):
+    """
+    Frame to display package readme content
+    """
 
     def __init__(self,parent,packageInfo:PackageDataInfo):
         super().__init__(parent)
@@ -69,6 +78,9 @@ class ReadMeViewerWidget(Frame):
 
 
 class GraphDownloadsWidget(Frame):
+    """
+    Frame to display package download informations
+    """
     listData:list
     
     def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:list, listDownloadsThirty:list):
@@ -98,6 +110,9 @@ class GraphDownloadsWidget(Frame):
         
 
     def drawDownloadGraph(self,listDownload:list, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):
+        """
+        Draw a graph to represent download evolution
+        """
         maxValue = max(listDownload.downloads)
         minValue = min(listDownload.downloads)
 
@@ -113,6 +128,9 @@ class GraphDownloadsWidget(Frame):
 
 
     def exportDownloadReport(self):
+        """
+        Export package download informations as csv 
+        """
         targetFilename = filedialog.asksaveasfilename(filetypes=[("csv file","*.csv")], defaultextension=".csv",initialfile="downloadNpm.csv", title="Télécharger le rapport")
         if targetFilename:
             with open(targetFilename,mode="w", encoding='utf-8',newline='') as report:

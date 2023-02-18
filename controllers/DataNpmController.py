@@ -11,6 +11,9 @@ if TYPE_CHECKING:
 
 
 class GetNpmDataThread(Thread):
+    """
+    Thread to get npm data
+    """
     def __init__(self, app2Update:"MyApp",npmPackage:str ):
         super().__init__()
         self.gui = app2Update
@@ -21,7 +24,7 @@ class GetNpmDataThread(Thread):
         npmInfoClient = NpmHelper()
         dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
         if not dataToShow:
-            self.gui.after(0,self.gui.showPopuError())
+            self.gui.after(0,self.gui.showPopupError())
         else:
             self.gui.after(0, self.gui.updateGeneralInfoTab(dataToShow))
             now = datetime.now()
