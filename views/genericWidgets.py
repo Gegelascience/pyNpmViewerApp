@@ -35,12 +35,13 @@ class LoaderFrame(Frame):
         """
         Update loader animation
         """
-        self.loaderIconCanvas.delete(item)
-        xPoint=(self.zoneLoader%3)*50
-        yPoint=0
-        length=50
+        if item.winfo_exists():
+            self.loaderIconCanvas.delete(item)
+            xPoint=(self.zoneLoader%3)*50
+            yPoint=0
+            length=50
 
-        item=self.loaderIconCanvas.create_rectangle(xPoint, yPoint, xPoint+length, yPoint+length, fill='red', outline='')
-        self.zoneLoader+=1
+            item=self.loaderIconCanvas.create_rectangle(xPoint, yPoint, xPoint+length, yPoint+length, fill='red', outline='')
+            self.zoneLoader+=1
 
-        self.after(500, self.updateLoader,item)
+            self.after(500, self.updateLoader,item)
