@@ -3,7 +3,7 @@ name: Run Test
 on: workflow_dispatch
 
 jobs:
-  CI:
+  Test:
     runs-on: ubuntu-latest
 
     steps:

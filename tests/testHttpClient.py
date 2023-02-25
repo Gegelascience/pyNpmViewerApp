@@ -28,5 +28,9 @@ class HttpClientTestCase(unittest.TestCase):
         else:
             self.assertIsInstance(response.text(),str)
 
-
+    def test_ResponseWrapperBinaryOk(self):
+        response = requestWrapper(self.urlBinary)
+        self.assertIsInstance(response, ResponseWrapper)
+        if response.status == 200:
+            self.assertIsInstance(response.raw(),bytes)
         

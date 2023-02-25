@@ -18,6 +18,9 @@ class ResponseWrapper(typing.NamedTuple):
             return self.body.decode(self.headers.get_content_charset("utf-8"))
         else:
             return self.body
+        
+    def raw(self):
+        return self.body
 
     def json(self) -> typing.Any:
         """
