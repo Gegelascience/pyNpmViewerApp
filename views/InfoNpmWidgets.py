@@ -3,6 +3,9 @@ from tkinter import ttk,filedialog
 from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
 import csv
+from Helpers.SvgHelper import saveGraphAsSvg
+
+from models.NpmModels import PackageDownloadInfo
 
 class InfoPackageWidget(Frame):
     """
@@ -82,8 +85,9 @@ class GraphDownloadsWidget(Frame):
     Frame to display package download informations
     """
     listData:list
+    last30days:PackageDownloadInfo
     
-    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:list, listDownloadsThirty:list):
+    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:PackageDownloadInfo, listDownloadsThirty:PackageDownloadInfo):
         super().__init__(parent)
 
         # retour etat traitement
@@ -103,13 +107,14 @@ class GraphDownloadsWidget(Frame):
         if listDownloadsThirty:
             self.drawDownloadGraph(listDownloadsThirty,14,"30 derniers jours")
             self.listData = [{"Téléchagements":d} for d in listDownloadsThirty.downloads]
+            self.last30days = listDownloadsThirty
 
             btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
             btnReport.bind('<Return>', self.exportDownloadReport)
             btnReport.pack()
         
 
-    def drawDownloadGraph(self,listDownload:list, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):
+    def drawDownloadGraph(self,listDownload:PackageDownloadInfo, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):
         """
         Draw a graph to represent download evolution
         """
@@ -139,4 +144,5 @@ class GraphDownloadsWidget(Frame):
                 for row in self.listData:
                     dictWriter.writerow(row)
             
+            saveGraphAsSvg(self.last30days,targetFilename.replace(".csv",".svg"))
 
