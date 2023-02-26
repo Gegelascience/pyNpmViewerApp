@@ -13,11 +13,16 @@ def saveGraphAsSvg(data:PackageDownloadInfo,filepath:str):
     
     root = ET.XML(initialStr)
     graphZone = ET.SubElement(root,"g")
-    graphZone.set("stroke", "red")
+    #graphZone.set("stroke", "red")
 
     for i,dayStat in enumerate(data.downloads):
-        #if dayStat in (minValue,maxValue):
-        #    graph.create_text(i*14 + 5,10,text=dayStat)
+        if dayStat in (minValue,maxValue):
+            textTag = ET.SubElement(graphZone,"text")
+            textTag.set("x",str(i*14 + 5))
+            textTag.set("y",str(15))
+            textTag.text = str(dayStat)
+            textTag.set("color","black")
+
         if i > 0:
 
             line = ET.SubElement(graphZone,"line")
@@ -26,6 +31,8 @@ def saveGraphAsSvg(data:PackageDownloadInfo,filepath:str):
             line.set("x1",str((i-1)*14 + 5))
             line.set("y2",str(20+(maxValue-dayStat)*100/maxValue))
             line.set("x2",str(i*14 + 5))
+            line.set("stroke","red")
+
     tree = ET.ElementTree(root)
     ET.register_namespace("","http://www.w3.org/2000/svg")
 
