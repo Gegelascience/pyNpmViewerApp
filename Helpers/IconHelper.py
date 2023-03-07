@@ -80,22 +80,6 @@ def createIcon():
 			else:
 				icoFile.write(el)
 
-	dataTest = None
-	with open("test.ico","rb") as example:
-		dataTest = example.read()
-
-	
-
-	dataEx = None
-	with open("wikipedia.ico","rb") as example:
-		dataEx = example.read()
-
-	print("testico icodir",dataTest[0:6])
-	print("exemple icodir",dataEx[0:6])
-
-	print("testico icoentry",dataTest[6:24])
-	print("exemple icoentry",dataEx[6:24])
-
 
 
 
