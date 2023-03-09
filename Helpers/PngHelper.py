@@ -26,7 +26,7 @@ def createPng(rawData, height:int, width:int):
 	IHDR[1] = u'IHDR'.encode('ascii')
 	IHDR[2] = struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0)
 	IHDR[0] = struct.pack('>I', len(IHDR[2]))
-	IHDR[3] = struct.pack('>I', zlib.crc32(('IHDR' + IHDR[2].decode()).encode()))
+	IHDR[3] = struct.pack('>I', zlib.crc32(IHDR[2], zlib.crc32(struct.pack('>4s', u'IHDR'.encode('ascii')))))
 
 
 	# IDAT
@@ -34,13 +34,13 @@ def createPng(rawData, height:int, width:int):
 	IDAT[1] = u'IDAT'.encode('ascii')
 	IDAT[2] = image_compressee
 	IDAT[0] = struct.pack('>I', len(IDAT[2]))
-	IDAT[3] = struct.pack('>I', zlib.crc32((str(IDAT[1]) + str(IDAT[2])).encode()))
+	IDAT[3] = struct.pack('>I', zlib.crc32(IDAT[2], zlib.crc32(struct.pack('>4s', u'IDAT'.encode('ascii')))))
 
 	# IEND
 	IEND = ['', '', '', '']
 	IEND[1] = u'IEND'.encode('ascii')
 	IEND[0] = struct.pack('>I', len(IEND[2]))
-	IEND[3] = struct.pack('>I', zlib.crc32(('IEND' + IEND[2]).encode()))
+	IEND[3] = struct.pack('>I', zlib.crc32(IEND[2].encode(), zlib.crc32(struct.pack('>4s', u'IEND'.encode('ascii')))))
 
 
 	pngBytesContent = []

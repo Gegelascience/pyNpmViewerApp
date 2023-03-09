@@ -52,15 +52,17 @@ def createIcon(actualData,width,height):
 	icoFileHeaders.extend(header)
 	icoFileHeaders.extend(directory)
 
+	icoBytes = []
+	for byte in icoFileHeaders:
+		#print("byte",byte )
+		icoBytes.append(byte.to_bytes(1, byteorder='little'))
 
+	for el in dataPng:
+		icoBytes.append(el)
 
-	with open("test.ico","wb") as icoFile:
-		for byte in icoFileHeaders:
-			#print("byte",byte )
-			icoFile.write(byte.to_bytes(1, byteorder='little'))
+	return icoBytes
 
-		for el in dataPng:
-			icoFile.write(el)
+	
 
 
 
@@ -77,4 +79,9 @@ if __name__ == "__main__":
 		actualData.append(rowData)	
 		row+=1
 
-	createIcon(actualData, 32,32)
+	iconFileContent =createIcon(actualData, 32,32)
+
+	with open("test.ico","wb") as icoFile:
+
+		for el in iconFileContent:
+			icoFile.write(el)
