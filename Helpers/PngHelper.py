@@ -2,8 +2,10 @@ import zlib
 import struct
 
 
-def createPng(rawData, height, width):
-	
+def createPng(rawData, height:int, width:int):
+	"""
+	retourne le contenu d'un fichier png sous forme d'une liste de bytes objects
+	"""
 	image = []
 
 	for ligne in rawData:
@@ -42,11 +44,21 @@ def createPng(rawData, height, width):
 
 
 	pngBytesContent = []
+	pngBytesNearlyOK = []
 
-	pngBytesContent.extend(signature)
-	pngBytesContent.extend(IHDR)
-	pngBytesContent.extend(IDAT)
-	pngBytesContent.extend(IEND)
+	pngBytesNearlyOK.extend(signature)
+	pngBytesNearlyOK.extend(IHDR)
+	pngBytesNearlyOK.extend(IDAT)
+	pngBytesNearlyOK.extend(IEND)
+
+	for el in pngBytesNearlyOK:
+		if isinstance(el,int):
+			pngBytesContent.append(el.to_bytes(1, byteorder='little'))
+		elif isinstance(el,str):
+			if len(el) > 0:
+				pngBytesContent.append(bytearray(el,encoding="utf-8"))
+		else:
+			pngBytesContent.append(el)
 
 	return pngBytesContent
 
@@ -62,10 +74,4 @@ if __name__ == "__main__":
 
 	with open("test.png","wb") as pngTest:
 		for el in pngContent:
-			if isinstance(el,int):
-				pngTest.write(el.to_bytes(1, byteorder='little'))
-			elif isinstance(el,str):
-				if len(el) > 0:
-					pngTest.write(bytearray(el,encoding="utf-8"))
-			else:
-				pngTest.write(el)
+			pngTest.write(el)

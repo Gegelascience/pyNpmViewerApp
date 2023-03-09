@@ -72,13 +72,7 @@ def createIcon():
 			icoFile.write(byte.to_bytes(1, byteorder='little'))
 
 		for el in dataPng:
-			if isinstance(el,int):
-				icoFile.write(el.to_bytes(1, byteorder='little'))
-			elif isinstance(el,str):
-				if len(el) > 0:
-					icoFile.write(bytearray(el,encoding="utf-8"))
-			else:
-				icoFile.write(el)
+			icoFile.write(el)
 
 
 
