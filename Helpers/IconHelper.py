@@ -5,13 +5,13 @@ def returnIconHeaderValue():
 	# ico with 1 image
 	return [0,0,1,0,1,0]
 
-def returnIconDirectory():
+def returnIconDirectory(width, height):
 	#ico 16x16
 	directoryData = []
 	# largeur
-	directoryData.append(32)
-	# longueur
-	directoryData.append(32)
+	directoryData.append(width)
+	# hauteur
+	directoryData.append(height)
 	
 	# 1 couleur
 	directoryData.append(1)
@@ -39,27 +39,15 @@ def returnIconDirectory():
 	directoryData.append(0)
 
 
-
 	return directoryData
 
-def createIcon():
+def createIcon(actualData,width,height):
 	icoFileHeaders = []
 	
 	header = returnIconHeaderValue()
-	directory = returnIconDirectory()
+	directory = returnIconDirectory(width,height)
 
-	actualData = []
-	row =0
-	while row < 32:
-		col = 0
-		rowData = []
-		while col < 32:
-			rowData.append([255,255,255,255])
-			col+=1
-		actualData.append(rowData)	
-		row+=1
-
-	dataPng = PngHelper.createPng(actualData,32,32)
+	dataPng = PngHelper.createPng(actualData,width,height)
 
 	icoFileHeaders.extend(header)
 	icoFileHeaders.extend(directory)
@@ -78,4 +66,15 @@ def createIcon():
 
 
 if __name__ == "__main__":
-	createIcon()
+	actualData = []
+	row =0
+	while row < 32:
+		col = 0
+		rowData = []
+		while col < 32:
+			rowData.append([255,255,255,255])
+			col+=1
+		actualData.append(rowData)	
+		row+=1
+
+	createIcon(actualData, 32,32)
