@@ -3,7 +3,7 @@ from tkinter import *
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
-import Helpers.PngHelper as PngHelper
+from Helpers.PngHelper import PngBuilder
 
 def addLoader(parentFrame: Frame):
 	"""
@@ -35,10 +35,8 @@ class MyApp(Tk):
 			actualData.append(rowData)	
 			row+=1
 			
-		pngContent = PngHelper.createPng(actualData,32,32)
-		with open("imageIcon.png","wb") as testFile:
-			for byte in pngContent:
-				testFile.write(byte)
+		pngBuilder = PngBuilder(actualData,32,32)
+		pngBuilder.writeFile("imageIcon.png")
 
 		photo = PhotoImage(file="imageIcon.png")
 		self.wm_iconphoto(True,photo)

@@ -1,4 +1,4 @@
-import PngHelper
+from PngHelper import PngBuilder
 
 
 def returnIconHeaderValue():
@@ -47,7 +47,7 @@ def createIcon(actualData,width,height):
 	header = returnIconHeaderValue()
 	directory = returnIconDirectory(width,height)
 
-	dataPng = PngHelper.createPng(actualData,width,height)
+	pngElement = PngBuilder(actualData,width,height)
 
 	icoFileHeaders.extend(header)
 	icoFileHeaders.extend(directory)
@@ -57,7 +57,7 @@ def createIcon(actualData,width,height):
 		#print("byte",byte )
 		icoBytes.append(byte.to_bytes(1, byteorder='little'))
 
-	for el in dataPng:
+	for el in pngElement.byteContentList:
 		icoBytes.append(el)
 
 	return icoBytes
