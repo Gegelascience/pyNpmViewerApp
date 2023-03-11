@@ -36,9 +36,8 @@ class MyApp(Tk):
 			row+=1
 			
 		pngBuilder = PngBuilder(actualData,32,32)
-		pngBuilder.writeFile("imageIcon.png")
+		photo = PhotoImage(data= pngBuilder.binaryContent)
 
-		photo = PhotoImage(file="imageIcon.png")
 		self.wm_iconphoto(True,photo)
 
 		ttk.Label(self,text="Renseigner le nom du package").pack()
