@@ -13,6 +13,26 @@ def addLoader(parentFrame: Frame):
 		child.destroy()
 	LoaderFrame(parentFrame).pack()
 
+def generateIconImg() -> PhotoImage:
+	actualData = []
+
+	row =0
+	while row < 32:
+		col = 0
+		rowData = []
+		while col < 32:
+			if row > 2 and row <29 and (col in [4,5,6,25,26,27] or col==row or col == row+1 or col == row-1):
+
+				rowData.append([255,255,255,255])
+			else:
+				rowData.append([255,0,0,255])
+			col+=1
+		actualData.append(rowData)	
+		row+=1
+
+	pngBuilder = PngBuilder(actualData,32,32)
+	return PhotoImage(data= pngBuilder.binaryContent)
+
 class MyApp(Tk):
 	"""
 	App Class
@@ -23,21 +43,8 @@ class MyApp(Tk):
 		
 		self.title("Informations Package NPM")
 		self.geometry('600x800')
-
-		actualData = []
-		row =0
-		while row < 32:
-			col = 0
-			rowData = []
-			while col < 32:
-				rowData.append([255,0,0,255])
-				col+=1
-			actualData.append(rowData)	
-			row+=1
-			
-		pngBuilder = PngBuilder(actualData,32,32)
-		photo = PhotoImage(data= pngBuilder.binaryContent)
-
+		
+		photo = generateIconImg()
 		self.wm_iconphoto(True,photo)
 
 		ttk.Label(self,text="Renseigner le nom du package").pack()
