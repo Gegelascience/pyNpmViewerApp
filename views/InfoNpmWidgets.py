@@ -120,7 +120,7 @@ class GraphDownloadsWidget(Frame):
 
             btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
             btnReport.bind('<Return>', self.exportDownloadReport)
-            btnReport.pack()
+            btnReport.pack(pady=(10,0))
         
 
     def drawDownloadGraph(self,listDownload:PackageDownloadInfo, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):

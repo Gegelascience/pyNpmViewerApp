@@ -35,7 +35,7 @@ class LoaderFrame(Frame):
 
         self.loaderIconCanvas = Canvas(self, width=150, height=100)
 
-        self.loaderIconCanvas.configure(bg="white")
+        self.loaderIconCanvas.configure(bg="white",highlightthickness=0)
 
         self.loaderIconCanvas.pack()
 
