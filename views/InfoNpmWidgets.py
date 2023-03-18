@@ -21,7 +21,7 @@ class InfoPackageWidget(Frame):
 
         self.data = packageInfo
         
-        ttk.Label(self,text= self.data.name).pack(pady=(20,0))
+        ttk.Label(self,text= self.data.name).pack(pady=(20,10))
 
         generalDataContainer = Frame(self)
 
@@ -51,7 +51,7 @@ class InfoPackageWidget(Frame):
 
         btnAccesNpmPage = ttk.Button(self, text="Accès page npm", command=self.openNpmPage)
         btnAccesNpmPage.bind('<Return>', self.openNpmPage)
-        btnAccesNpmPage.pack()
+        btnAccesNpmPage.pack(pady=(10,0))
 
     def openNpmPage(self):
         """
@@ -71,7 +71,7 @@ class ReadMeViewerWidget(Frame):
         # fenetre fond blanc
         self.configure(bg='white')
 
-        ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
+        ttk.Label(self,text= packageInfo.name).pack(pady=(20,10))
 
         scrollbarReadme=Scrollbar(self,orient="vertical")
         scrollbarReadme.pack(side="right",fill="y")

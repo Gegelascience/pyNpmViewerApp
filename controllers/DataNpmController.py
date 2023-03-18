@@ -1,7 +1,7 @@
 from Helpers.NpmHelper import NpmHelper
 from threading import Thread
 from datetime import datetime
-from Helpers.CustomExceptionHelper import UnpublishedPackage
+from models.CustomExceptions import UnpublishedPackage
 
 from typing import TYPE_CHECKING
 

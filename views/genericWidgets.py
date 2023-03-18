@@ -31,7 +31,7 @@ class LoaderFrame(Frame):
         self.configure(bg='white')
 
         self.zoneLoader = 0
-        ttk.Label(self,text="Récupération en cours").pack(pady=(20,0))
+        ttk.Label(self,text="Récupération en cours").pack(pady=(20,10))
 
         self.loaderIconCanvas = Canvas(self, width=150, height=100)
 

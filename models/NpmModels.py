@@ -1,5 +1,5 @@
 from datetime import datetime
-from Helpers.CustomExceptionHelper import UnpublishedPackage
+from models.CustomExceptions import UnpublishedPackage
 
 class PackageDataInfo:
 

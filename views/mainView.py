@@ -64,7 +64,7 @@ class MyApp(Tk):
 		photo = generateIconImg()
 		self.wm_iconphoto(True,photo)
 
-		ttk.Label(self,text="Renseigner le nom du package").pack(pady=(5,0))
+		ttk.Label(self,text="Renseignez le nom du package").pack(pady=(5,0))
 		
 		# ajout du champ formulaire
 		self.package = StringVar()
