@@ -27,7 +27,7 @@ class InfoPackageWidget(Frame):
 
         columnLabel = Frame(generalDataContainer,background="white")
 
-        ttk.Label(columnLabel,text="Auteur: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Contributeurs: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Dernière version: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Licence: ").pack(anchor="w")
@@ -36,7 +36,7 @@ class InfoPackageWidget(Frame):
         ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
 
         columnValue = Frame(generalDataContainer,background="white")
-        ttk.Label(columnValue,text=self.data.author).pack(anchor="w")
+        ttk.Label(columnValue,text=self.data.contributors).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.license).pack(anchor="w")

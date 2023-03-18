@@ -113,11 +113,11 @@ class MyApp(Tk):
 			child.destroy()
 		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays,listDownloadsThirty).pack()	
 
-	def showPopupError(self):
+	def showPopupError(self, message):
 		"""
 		Show error popup
 		"""
-		ErrorPopup(self)
+		ErrorPopup(self, message)
 
 		
 
