@@ -46,6 +46,9 @@ class NpmHelper:
             return None
 
     def getDownloadBetween2Date(self, packageName:str,startPeriod:datetime, endPeriod:datetime):
+        if endPeriod.year < 2015:
+            print("pas de stats avant 2015")
+            return None
         rawResponse = requestWrapper(self._baseUrlDownloadCount + startPeriod.strftime("%Y-%m-%d") + ":" + endPeriod.strftime("%Y-%m-%d") + "/" + packageName)
         if rawResponse.status == 200:
 
@@ -53,7 +56,7 @@ class NpmHelper:
             if len(possibleData) > 0:
                 return PackageDownloadInfo(possibleData)
         else:
-            print("error between", rawResponse.status, rawResponse.body)
+            print("error between", rawResponse.status, rawResponse.body, startPeriod, endPeriod)
             return None
         
 
