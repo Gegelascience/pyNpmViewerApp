@@ -16,13 +16,16 @@ class InfoPackageWidget(Frame):
     def __init__(self,parent, packageInfo:PackageDataInfo):
         super().__init__(parent)
 
+        # fenetre fond blanc
+        self.configure(bg='white')
+
         self.data = packageInfo
         
         ttk.Label(self,text= self.data.name).pack(pady=(20,0))
 
         generalDataContainer = Frame(self)
 
-        columnLabel = Frame(generalDataContainer)
+        columnLabel = Frame(generalDataContainer,background="white")
 
         ttk.Label(columnLabel,text="Auteur: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
@@ -32,7 +35,7 @@ class InfoPackageWidget(Frame):
         ttk.Label(columnLabel,text="Description: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
 
-        columnValue = Frame(generalDataContainer)
+        columnValue = Frame(generalDataContainer,background="white")
         ttk.Label(columnValue,text=self.data.author).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
@@ -65,6 +68,9 @@ class ReadMeViewerWidget(Frame):
     def __init__(self,parent,packageInfo:PackageDataInfo):
         super().__init__(parent)
 
+        # fenetre fond blanc
+        self.configure(bg='white')
+
         ttk.Label(self,text= packageInfo.name).pack(pady=(20,0))
 
         scrollbarReadme=Scrollbar(self,orient="vertical")
@@ -89,6 +95,9 @@ class GraphDownloadsWidget(Frame):
     
     def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:PackageDownloadInfo, listDownloadsThirty:PackageDownloadInfo):
         super().__init__(parent)
+
+        # fenetre fond blanc
+        self.configure(bg='white')
 
         # retour etat traitement
         self.infoError = StringVar()

@@ -10,7 +10,12 @@ class ErrorPopup(Toplevel):
         super().__init__(parent)
         self.title("ERREUR")
         self.geometry('150x50')
-        ttk.Label(self,text=textError).pack()
+
+        # fenetre fond blanc
+        self.configure(bg='white')
+
+        ttk.Label(self,text=textError).pack(pady=(20,0))
+        
 
 
 class LoaderFrame(Frame):
@@ -21,10 +26,17 @@ class LoaderFrame(Frame):
 
     def __init__(self,parent:Frame):
         super().__init__(parent)
+
+        # fenetre fond blanc
+        self.configure(bg='white')
+
         self.zoneLoader = 0
         ttk.Label(self,text="Récupération en cours").pack(pady=(20,0))
 
         self.loaderIconCanvas = Canvas(self, width=150, height=100)
+
+        self.loaderIconCanvas.configure(bg="white")
+
         self.loaderIconCanvas.pack()
 
         self.updateLoader()

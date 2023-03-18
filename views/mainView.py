@@ -43,20 +43,37 @@ class MyApp(Tk):
 		
 		self.title("Informations Package NPM")
 		self.geometry('600x800')
-		
+
+		# fenetre fond blanc
+		self.configure(bg='white')
+
+		# Create an instance of ttk style
+		s = ttk.Style()
+		s.theme_use('default')
+		s.configure('TNotebook.Tab', background="white")
+		s.map("TNotebook.Tab", background= [("selected", "red")])
+		s.map("TNotebook.Tab", foreground= [("selected", "white")])
+
+		s.configure('TNotebook', background="white")
+		s.configure('TFrame', background="white")
+		s.configure('TLabel', background="white")
+		s.configure("TButton", background="red", foreground="white",pady=10)
+
+
+		# customisation de l'icone
 		photo = generateIconImg()
 		self.wm_iconphoto(True,photo)
 
-		ttk.Label(self,text="Renseigner le nom du package").pack()
+		ttk.Label(self,text="Renseigner le nom du package").pack(pady=(5,0))
 		
 		# ajout du champ formulaire
 		self.package = StringVar()
 		package_entry = ttk.Entry(self, width=20, textvariable=self.package)
-		package_entry.pack()
+		package_entry.pack(pady=(10,0))
 		
 		btnSearch = ttk.Button(self, text="Rechercher", command=self.showInformation)
 		btnSearch.bind('<Return>', self.showInformation)
-		btnSearch.pack()
+		btnSearch.pack(pady=(10,0))
 
 		tabControl = ttk.Notebook(self)
   
