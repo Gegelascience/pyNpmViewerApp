@@ -119,6 +119,10 @@ class MyApp(Tk):
 		"""
 		ErrorPopup(self, message)
 
+
+if __name__ == "__main__":
+	app = MyApp()
+	app.mainloop()
 		
 
 

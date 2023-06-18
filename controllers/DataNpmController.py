@@ -6,7 +6,7 @@ from models.CustomExceptions import UnpublishedPackage
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from views.mainView import MyApp
+    from NpmViewerApp import MyApp
 
 
 
