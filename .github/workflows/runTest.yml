@@ -3,7 +3,7 @@ name: Run Test
 on: workflow_dispatch
 
 jobs:
-  Test:
+  Test_job:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +17,11 @@ jobs:
       run: |
         python testRunner.py
 
+  Return_result:
+    needs: [Test_job]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
