@@ -1,11 +1,18 @@
-from Helpers.tests import *
+#from Helpers.tests import *
+import Helpers.tests as helperTestModule
 import unittest
 from io import StringIO
+import sys
 
 if __name__ == "__main__":
-    reportTest = StringIO()
-    runner = unittest.TextTestRunner(reportTest,descriptions=True,verbosity=2)
-    unittest.main(verbosity=2,buffer=False,exit=False, testRunner=runner)
-
+    reportStream = StringIO()
+    runner = unittest.TextTestRunner(buffer=False,stream=reportStream,descriptions=True,verbosity=2)
+    suite = unittest.TestLoader().loadTestsFromModule(helperTestModule)
+    resultTest =runner.run(suite)
+    
     with open("report.txt","w",encoding="utf-8") as file:
-        file.write(reportTest.getvalue())
+        file.write(reportStream.getvalue())
+
+
+    if not resultTest.wasSuccessful():
+        sys.exit(1)
