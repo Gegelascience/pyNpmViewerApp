@@ -1,6 +1,7 @@
 from Helpers.PngHelper import PngBuilder
 import unittest
 from tkinter import PhotoImage, Tk
+import os
 
 
 class PngHelperTestCase(unittest.TestCase):
@@ -30,6 +31,10 @@ class PngHelperTestCase(unittest.TestCase):
         self.assertEqual(data[0:8], b'\x89PNG\r\n\x1a\n')
 
     def test_structurePngOK(self):
+
+        if os.environ.get('DISPLAY','') == '':
+            print('no display found. Using :0.0')
+            os.environ.__setitem__('DISPLAY', ':0.0')
         testApp = Tk()
         testApp.withdraw()
         PhotoImage(master=testApp,data= self.photoBuilder.binaryContent)
