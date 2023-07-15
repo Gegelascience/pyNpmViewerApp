@@ -14,17 +14,14 @@ jobs:
         python-version: "3.10"
 
     - name: Unit Tests
-      continue-on-error: true
+
       run: |
         python testRunner.py
 
     - name: Archive code coverage results
+      if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
         path: report.txt
 
-    - name: Force CI to failed if errors on unit tests
-      if: ${{ failure() }}
-      run: |
-        exit 1
