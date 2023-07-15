@@ -13,6 +13,10 @@ jobs:
       with:
         python-version: "3.10"
 
+    - name: Set up virtual frame buffer
+      run: |
+        apt-get install -y xvfb
+
     - name: Unit Tests
       run: |
         python testRunner.py

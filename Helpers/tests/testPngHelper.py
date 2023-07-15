@@ -33,8 +33,9 @@ class PngHelperTestCase(unittest.TestCase):
     def test_structurePngOK(self):
 
         if os.environ.get('DISPLAY','') == '':
-            print('no display found. Using :0.0')
-            os.environ.__setitem__('DISPLAY', ':0.0')
+            print('no display found. Using :1.0')
+            os.system('Xvfb :1 -screen 0 1600x1200x16  &')
+            os.environ['DISPLAY'] = ':1.0'
         testApp = Tk()
         testApp.withdraw()
         PhotoImage(master=testApp,data= self.photoBuilder.binaryContent)
