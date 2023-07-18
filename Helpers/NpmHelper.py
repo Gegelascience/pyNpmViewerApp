@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 from Helpers.HttpClient import requestWrapper
 from models.NpmModels import PackageDataInfo, PackageDownloadInfo
-
+import hashlib
+import base64
 
 class NpmHelper:
 
@@ -14,7 +15,8 @@ class NpmHelper:
 
             possibleData = rawResponse.json()
             if len(possibleData) > 0:
-                return PackageDataInfo(possibleData)
+                integrityOk= self._checkPackageIntegrity(possibleData)
+                return PackageDataInfo(possibleData,integrityOk)
         else:
             print("error infos", rawResponse.status, rawResponse.body)
             return None
@@ -75,4 +77,27 @@ class NpmHelper:
         listInterval.append({"start":indexDate, "end":end})
     
         return listInterval
+    
+    def _checkPackageIntegrity(self,rawInfoNpm:dict):
+        if rawInfoNpm:
+            try:
+                lastVersionTag = rawInfoNpm.get("dist-tags",{}).get("latest")
+                if lastVersionTag:
+                    lastVersion = rawInfoNpm.get("versions",{}).get(lastVersionTag)
+                    tarballUrl = lastVersion.get("dist").get("tarball")
+                    integrityTest = lastVersion.get("dist").get("integrity")
+
+                    rawResponse = requestWrapper(tarballUrl)
+                    if rawResponse.status == 200:
+                        binaryToCheck = rawResponse.raw()
+                        digestData = base64.b64encode(hashlib.sha512(binaryToCheck).digest())
+                        if integrityTest.split("-")[0] == "sha512" and integrityTest.split("-")[1] == digestData.decode("utf-8"):
+                            return True
+
+            except Exception as ex:
+                print("ex", ex)
+                return False 
+            
+        return False
+
 

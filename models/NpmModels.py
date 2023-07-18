@@ -3,7 +3,7 @@ from models.CustomExceptions import UnpublishedPackage
 
 class PackageDataInfo:
 
-    def __init__(self, rawData: dict):
+    def __init__(self, rawData: dict, isPackageIntegrityOk=False):
         
         self.name:str =  rawData["name"]
         self.description:str= rawData.get("description","")
@@ -34,6 +34,8 @@ class PackageDataInfo:
             self.readmeLines: list = readMeStr.split("\r\n")
         else:
             self.readmeLines: list = readMeStr.split("\n")
+
+        self.lastVersionIntegrity = isPackageIntegrityOk
 
 class PackageDownloadInfo:
     

@@ -23,7 +23,7 @@ class InfoPackageWidget(Frame):
         
         ttk.Label(self,text= self.data.name).pack(pady=(20,10))
 
-        generalDataContainer = Frame(self)
+        generalDataContainer = Frame(self,background="white")
 
         columnLabel = Frame(generalDataContainer,background="white")
 
@@ -34,6 +34,7 @@ class InfoPackageWidget(Frame):
 
         ttk.Label(columnLabel,text="Description: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
+        ttk.Label(columnLabel,text="Integrité \n(dernière version): ").pack(anchor="w")
 
         columnValue = Frame(generalDataContainer,background="white")
         ttk.Label(columnValue,text=self.data.contributors).pack(anchor="w")
@@ -43,6 +44,11 @@ class InfoPackageWidget(Frame):
         
         ttk.Label(columnValue,text=self.data.description).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.keywords).pack(anchor="w")
+
+        if self.data.lastVersionIntegrity:
+            ttk.Label(columnValue,text="\nOK").pack(anchor="w")
+        else:
+            ttk.Label(columnValue,text="\nKO").pack(anchor="w")
         
         columnLabel.pack(side=LEFT)
         columnValue.pack()
