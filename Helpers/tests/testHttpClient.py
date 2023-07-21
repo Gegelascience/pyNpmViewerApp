@@ -1,4 +1,4 @@
-from Helpers.HttpClient import ResponseWrapper, requestWrapper
+from Helpers.HttpClient import ResponseWrapper, requestWrapper, getBasicAuthorizationToken
 import unittest
 from email.message import Message
 from unittest.mock import patch, Mock
@@ -56,4 +56,7 @@ class HttpClientTestCase(unittest.TestCase):
         response = requestWrapper("https://dummyUrl")
         self.assertIsInstance(response, ResponseWrapper)
         self.assertIsInstance(response.raw(),bytes)
-        
+
+    def test_basicAuth(self):
+        possibleBasicToken = getBasicAuthorizationToken("myUser","MyPwd")
+        self.assertEqual(possibleBasicToken,"bXlVc2VyOk15UHdk")

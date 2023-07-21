@@ -38,7 +38,7 @@ class ResponseWrapper(typing.NamedTuple):
 
 def getBasicAuthorizationToken(user:str,mdp:str)-> str:
     # ajout de l'authentification
-    baseAuthCred = user + "/token:" + mdp
+    baseAuthCred = user + ":" + mdp
     baseAuthByte = baseAuthCred.encode('utf-8')
     nearlyOk = base64.encodebytes(baseAuthByte)
 
@@ -46,9 +46,7 @@ def getBasicAuthorizationToken(user:str,mdp:str)-> str:
     listOk = nearlyOk.split(b'\n')
 	
     # on recupère le token au format binaire
-    base64Cred=b''
-    for elem in listOk:
-        base64Cred = base64Cred + elem
+    base64Cred=b''.join(listOk)
 
     base64string = base64Cred.decode('utf-8')
     return base64string
