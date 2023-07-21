@@ -12,11 +12,13 @@ class NpmHelper:
     def getPackageGeneralInfo(self,packageName: str):
         rawResponse = requestWrapper(self._baseUrlInfo + packageName)
         if rawResponse.status == 200:
-
-            possibleData = rawResponse.json()
-            if len(possibleData) > 0:
-                integrityOk= self._checkPackageIntegrity(possibleData)
-                return PackageDataInfo(possibleData,integrityOk)
+            try:
+                possibleData = rawResponse.json()
+                if len(possibleData) > 0:
+                    integrityOk= self._checkPackageIntegrity(possibleData)
+                    return PackageDataInfo(possibleData,integrityOk)
+            except:
+                return None
         else:
             print("error infos", rawResponse.status, rawResponse.body)
             return None
@@ -26,10 +28,12 @@ class NpmHelper:
         ThirtyDaysAgo =now - timedelta(days=30)
         rawResponse = requestWrapper(self._baseUrlDownloadCount + ThirtyDaysAgo.strftime("%Y-%m-%d") + ":" + now.strftime("%Y-%m-%d") + "/" + packageName)
         if rawResponse.status == 200:
-
-            possibleData = rawResponse.json()
-            if len(possibleData) > 0:
-                return PackageDownloadInfo(possibleData)
+            try:
+                possibleData = rawResponse.json()
+                if len(possibleData) > 0:
+                    return PackageDownloadInfo(possibleData)
+            except:
+                return None
         else:
             print("error 30", rawResponse.status, rawResponse.body)
             return None
@@ -39,10 +43,12 @@ class NpmHelper:
         SevenDaysAgo =now - timedelta(days=7)
         rawResponse = requestWrapper(self._baseUrlDownloadCount + SevenDaysAgo.strftime("%Y-%m-%d") + ":" + now.strftime("%Y-%m-%d") + "/" + packageName)
         if rawResponse.status == 200:
-
-            possibleData = rawResponse.json()
-            if len(possibleData) > 0:
-                return PackageDownloadInfo(possibleData)
+            try:
+                possibleData = rawResponse.json()
+                if len(possibleData) > 0:
+                    return PackageDownloadInfo(possibleData)
+            except:
+                return None
         else:
             print("error 7 days", rawResponse.status, rawResponse.body)
             return None
@@ -53,10 +59,12 @@ class NpmHelper:
             return None
         rawResponse = requestWrapper(self._baseUrlDownloadCount + startPeriod.strftime("%Y-%m-%d") + ":" + endPeriod.strftime("%Y-%m-%d") + "/" + packageName)
         if rawResponse.status == 200:
-
-            possibleData = rawResponse.json()
-            if len(possibleData) > 0:
-                return PackageDownloadInfo(possibleData)
+            try:
+                possibleData = rawResponse.json()
+                if len(possibleData) > 0:
+                    return PackageDownloadInfo(possibleData)
+            except:
+                return None
         else:
             print("error between", rawResponse.status, rawResponse.body, startPeriod, endPeriod)
             return None

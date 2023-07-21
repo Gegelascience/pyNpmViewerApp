@@ -30,10 +30,9 @@ class ResponseWrapper(typing.NamedTuple):
             Pythonic representation of the JSON object
         """
         bodyToParse = self.text()
-        try:
-            output = json.loads(bodyToParse)
-        except json.JSONDecodeError:
-            output = ""
+
+        output = json.loads(bodyToParse)
+
         return output
 
 

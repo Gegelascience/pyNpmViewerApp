@@ -1,36 +1,59 @@
 from Helpers.HttpClient import ResponseWrapper, requestWrapper
 import unittest
-
+from email.message import Message
+from unittest.mock import patch, Mock
+import json
 
 class HttpClientTestCase(unittest.TestCase):
-    def setUp(self) -> None:
-        self.urlJson = "https://registry.npmjs.org/ngx-view360"
-        self.urlBinary = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1024px-The_Earth_seen_from_Apollo_17.jpg"
 
-    def test_ResponseWrapperJsonOk(self):
-        response = requestWrapper(self.urlJson)
+    @patch("Helpers.tests.testHttpClient.requestWrapper")
+    def test_ResponseWrapperJsonOk(self, mock_requestWrapper: Mock):
+        mock_requestWrapper.return_value = ResponseWrapper(
+                headers=None,
+                status=200,
+                body='{"data":{"someAttr":"something"}}',
+            )
+        response = requestWrapper("https://dummyUrl")
+        mock_requestWrapper.assert_called_once()
         self.assertIsInstance(response, ResponseWrapper)
-        if response.status == 200:
-            data = response.json()
-            self.assertIsInstance(data, dict)
-
-        else:
-            self.assertIsInstance(response.text(),str)
+        self.assertIsInstance(response.json(), dict)
 
 
-    def test_ResponseWrapperJsonKO(self):
-        response = requestWrapper(self.urlBinary)
+    @patch("Helpers.tests.testHttpClient.requestWrapper")
+    def test_ResponseWrapperTextOk(self, mock_requestWrapper: Mock):
+        headersMock = Message()
+        headersMock.add_header("Content-Type","text/html")
+        mock_requestWrapper.return_value = ResponseWrapper(
+                headers=headersMock,
+                status=404,
+                body=b'Not Found',
+            )
+        response = requestWrapper("https://dummyUrl")
+        mock_requestWrapper.assert_called_once()
+        self.assertIsInstance(response.text(),str)
+
+    @patch("Helpers.tests.testHttpClient.requestWrapper")
+    def test_ResponseWrapperJsonKO(self, mock_requestWrapper: Mock):
+        headersMock = Message()
+        headersMock.add_header("Content-Type","text/json")
+        mock_requestWrapper.return_value = ResponseWrapper(
+                headers=headersMock,
+                status=200,
+                body=b'qd"svf"dcc[d{svdwf{"{"}}]',
+            )
+        response = requestWrapper("https://dummyUrl")
         self.assertIsInstance(response, ResponseWrapper)
-        if response.status == 200:
-            with self.assertRaises(UnicodeDecodeError) as UnicodeErr:
-                data = response.json()
+        with self.assertRaises(json.JSONDecodeError) as jsonError:
+            response.json()
 
-        else:
-            self.assertIsInstance(response.text(),str)
-
-    def test_ResponseWrapperBinaryOk(self):
-        response = requestWrapper(self.urlBinary)
+    @patch("Helpers.tests.testHttpClient.requestWrapper")
+    def test_ResponseWrapperBinaryOk(self, mock_requestWrapper: Mock):
+        mock_requestWrapper.return_value = ResponseWrapper(
+                headers=None,
+                status=200,
+                body=b'qdsvfdcc[d{svdwf{{}}]',
+            )
+        response = requestWrapper("https://dummyUrl")
         self.assertIsInstance(response, ResponseWrapper)
-        if response.status == 200:
-            self.assertIsInstance(response.raw(),bytes)
+        self.assertIsInstance(response.raw(),bytes)
         
