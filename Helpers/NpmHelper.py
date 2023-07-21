@@ -15,7 +15,7 @@ class NpmHelper:
             try:
                 possibleData = rawResponse.json()
                 if len(possibleData) > 0:
-                    integrityOk= self._checkPackageIntegrity(possibleData)
+                    integrityOk= self.checkPackageIntegrity(possibleData)
                     return PackageDataInfo(possibleData,integrityOk)
             except:
                 return None
@@ -86,7 +86,7 @@ class NpmHelper:
     
         return listInterval
     
-    def _checkPackageIntegrity(self,rawInfoNpm:dict):
+    def checkPackageIntegrity(rawInfoNpm:dict):
         if rawInfoNpm:
             try:
                 lastVersionTag = rawInfoNpm.get("dist-tags",{}).get("latest")
