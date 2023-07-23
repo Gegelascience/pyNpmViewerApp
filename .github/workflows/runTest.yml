@@ -26,5 +26,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: unit-tests-report
-        path: reportUnitTest.txt
+        path: | 
+          reportUnitTest.txt
+          coverage-report.csv
 
