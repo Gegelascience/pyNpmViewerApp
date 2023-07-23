@@ -62,7 +62,7 @@ if __name__ == "__main__":
             nbBraceOpened = 0
             # crochets ouverts
             nbHookOpened = 0
-            # TODO deal with bracket, brace, hook opened and closed on multiple lines
+
             for row in rawDataCover:
                 nbBracketOpened+=row.count("(")
                 nbBracketOpened-=row.count(")")
@@ -91,7 +91,7 @@ if __name__ == "__main__":
                         closureLine = (( row.count("(") < row.count(")")) or ( row.count("{") < row.count("}"))  or ( row.count("[") < row.count("]")))
                         if (nbBracketOpened == 0 and nbBraceOpened == 0  and nbHookOpened == 0 and not closureLine) or firstAffectComplex:
                             rowNotExecuted+=1
-                            print("not executed", row, lastRowType)
+                            #print("not executed", row, lastRowType)
                     else:
                         rowExecuted+=1
                         
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                             rowExecuted+=1
 
             coverageSpec = {
-                "file":el,
+                "file":el.split(".cover")[0],
                 "coverage":(rowExecuted/(rowExecuted + rowNotExecuted))*100,
                 "rowOk":rowExecuted,
                 "rowKo":rowNotExecuted,
