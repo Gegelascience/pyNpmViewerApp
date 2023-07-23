@@ -41,7 +41,7 @@ if __name__ == "__main__":
     r = tracer.results()
     if not os.path.exists("tmpCoverage"):
         os.mkdir("tmpCoverage")
-    r.write_results(show_missing=True, summary=True,coverdir="tmpCoverage")
+    r.write_results(show_missing=True,coverdir="tmpCoverage")
 
     coverageReport = []
     coverageDir = os.path.join(os.getcwd(),"tmpCoverage")
@@ -55,7 +55,25 @@ if __name__ == "__main__":
             rowExecuted =0
             rowNotExecuted =0
             lastRowType = None
+
+            #parentheses ouvertes
+            nbBracketOpened = 0
+            # accolades ouvertes
+            nbBraceOpened = 0
+            # crochets ouverts
+            nbHookOpened = 0
+            # TODO deal with bracket, brace, hook opened and closed on multiple lines
             for row in rawDataCover:
+                nbBracketOpened+=row.count("(")
+                nbBracketOpened-=row.count(")")
+
+                nbBraceOpened+=row.count("{")
+                nbBraceOpened-=row.count("}")
+
+                nbHookOpened+=row.count("[")
+                nbHookOpened-=row.count("]")
+
+
                 if row.startswith(">>>>>>"):
 
                     checkRow =row.split(">>>>>> ")
@@ -67,13 +85,15 @@ if __name__ == "__main__":
                         if checkDeclarative[1] != None:
                             lastRowType =checkDeclarative[1]
                         rowExecuted+=1
-                    else:
-                        if lastRowType != "class":
-                            lastRowType =checkDeclarative[1]
+                    elif lastRowType != "class":
+                        lastRowType =checkDeclarative[1]
+                        firstAffectComplex = "=" in row and (( row.count("(") > row.count(")")) or ( row.count("{") > row.count("}"))  or ( row.count("[") > row.count("]")))
+                        closureLine = (( row.count("(") < row.count(")")) or ( row.count("{") < row.count("}"))  or ( row.count("[") < row.count("]")))
+                        if (nbBracketOpened == 0 and nbBraceOpened == 0  and nbHookOpened == 0 and not closureLine) or firstAffectComplex:
                             rowNotExecuted+=1
                             print("not executed", row, lastRowType)
-                        else:
-                            rowExecuted+=1
+                    else:
+                        rowExecuted+=1
                         
                 else:
                     match =re.search("[0-9]{1,10}:",row.strip())
