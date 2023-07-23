@@ -21,10 +21,10 @@ jobs:
       run: |
         python testRunner.py
 
-    - name: Archive code coverage results
+    - name: Archive unit tests results
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
-        name: code-coverage-report
-        path: report.txt
+        name: unit-tests-report
+        path: reportUnitTest.txt
 
