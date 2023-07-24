@@ -34,7 +34,8 @@ class PngHelperTestCase(unittest.TestCase):
 
         if os.environ.get('DISPLAY','') == '':
             print('no display found. Using :1.0')
-            os.system('Xvfb :1 -screen 0 1600x1200x16  &')
+            statusVirtualScreen = os.system('Xvfb :1 -screen 0 1600x1200x16  &')
+            print("virtual screen command status",statusVirtualScreen)
             os.environ['DISPLAY'] = ':1.0'
         testApp = Tk()
         testApp.withdraw()

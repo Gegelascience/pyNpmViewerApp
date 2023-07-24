@@ -21,6 +21,18 @@ jobs:
       run: |
         python testRunner.py
 
+    - name: Kill xvfb screen
+      if: ${{ always() }}
+      run: |
+        local xvfb_pids=`ps aux | grep tmp/xvfb-run | grep -v grep | awk '{print $2}'`
+        if [ "$xvfb_pids" != "" ]; then
+          echo "Killing the following xvfb processes: $xvfb_pids"
+          sudo kill $xvfb_pids
+        else
+          echo "No xvfb processes to kill"
+        fi
+
+
     - name: Archive unit tests results
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
