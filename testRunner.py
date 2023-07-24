@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
             coverageSpec = {
                 "file":el.split(".cover")[0],
-                "coverage":(rowExecuted/(rowExecuted + rowNotExecuted))*100,
+                "coverage":str(round((rowExecuted/(rowExecuted + rowNotExecuted))*100)) + "%",
                 "rowOk":rowExecuted,
                 "rowKo":rowNotExecuted,
                 "statements":rowExecuted + rowNotExecuted
