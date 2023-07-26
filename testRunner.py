@@ -5,8 +5,7 @@ from io import StringIO
 import sys
 import trace
 import os
-import re
-import csv
+from testCoverageHelper import CoverageHelper
 
 def testingProgram(dicResultTest:dict):
     reportStream = StringIO()
@@ -17,14 +16,6 @@ def testingProgram(dicResultTest:dict):
     with open("reportUnitTest.txt","w",encoding="utf-8") as file:
         file.write(reportStream.getvalue())
 
-def isDeclarationLine(rowToTest:str):
-    keywords = ["class","def","import","from","if __name__ == \"__main__\":","@"]
-
-    for k in keywords:
-        if rowToTest.strip().startswith(k):
-            return True, k
-        
-    return False, None
 
 if __name__ == "__main__":
     
@@ -43,82 +34,12 @@ if __name__ == "__main__":
         os.mkdir("tmpCoverage")
     r.write_results(show_missing=True,coverdir="tmpCoverage")
 
-    coverageReport = []
-    coverageDir = os.path.join(os.getcwd(),"tmpCoverage")
-    for el in os.listdir(coverageDir):
-        if el.endswith(".cover"):
-            with open(os.path.join(coverageDir, el),encoding="utf-8") as coverfile:
-                rawDataCover = coverfile.readlines()
-            fileRowLen = len(rawDataCover)
-            
-            ignoredRow =0
-            rowExecuted =0
-            rowNotExecuted =0
-            lastRowType = None
+    coverageWrapper =CoverageHelper("tmpCoverage")
 
-            #parentheses ouvertes
-            nbBracketOpened = 0
-            # accolades ouvertes
-            nbBraceOpened = 0
-            # crochets ouverts
-            nbHookOpened = 0
+    coverageWrapper.checkCoverage()
+    coverageWrapper.writeCoverageReport()
 
-            for row in rawDataCover:
-                nbBracketOpened+=row.count("(")
-                nbBracketOpened-=row.count(")")
-
-                nbBraceOpened+=row.count("{")
-                nbBraceOpened-=row.count("}")
-
-                nbHookOpened+=row.count("[")
-                nbHookOpened-=row.count("]")
-
-
-                if row.startswith(">>>>>>"):
-
-                    checkRow =row.split(">>>>>> ")
-                    checkDeclarative = isDeclarationLine(checkRow[1])
-                    if checkDeclarative[0]:
-                        lastRowType = checkDeclarative[1]
-                        rowExecuted+=1
-                    elif lastRowType == "class":
-                        if checkDeclarative[1] != None:
-                            lastRowType =checkDeclarative[1]
-                        rowExecuted+=1
-                    elif lastRowType != "class":
-                        lastRowType =checkDeclarative[1]
-                        firstAffectComplex = "=" in row and (( row.count("(") > row.count(")")) or ( row.count("{") > row.count("}"))  or ( row.count("[") > row.count("]")))
-                        closureLine = (( row.count("(") < row.count(")")) or ( row.count("{") < row.count("}"))  or ( row.count("[") < row.count("]")))
-                        if (nbBracketOpened == 0 and nbBraceOpened == 0  and nbHookOpened == 0 and not closureLine) or firstAffectComplex:
-                            rowNotExecuted+=1
-                            #print("not executed", row, lastRowType)
-                    else:
-                        rowExecuted+=1
-                        
-                else:
-                    match =re.search("[0-9]{1,10}:",row.strip())
-                    if match and match.start() == 0:
-                            rowExecuted+=1
-
-            coverageSpec = {
-                "file":el.split(".cover")[0],
-                "coverage":str(round((rowExecuted/(rowExecuted + rowNotExecuted))*100)) + "%",
-                "rowOk":rowExecuted,
-                "rowKo":rowNotExecuted,
-                "statements":rowExecuted + rowNotExecuted
-
-            }
-            coverageReport.append(coverageSpec)
-
-    with open ("coverage-report.csv","w",encoding="utf-8") as coverageFile:
-        writer =csv.DictWriter(coverageFile,["file", "coverage","statements","rowOk","rowKo"],extrasaction="ignore",lineterminator="\n")
-        writer.writeheader()
-        for spec in coverageReport:
-            writer.writerow(spec)
-            
-
-
-
+    
 
     if not dicResultTest["result"].wasSuccessful():
         sys.exit(1)
