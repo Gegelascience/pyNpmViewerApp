@@ -38,7 +38,6 @@ if __name__ == "__main__":
 
     coverageWrapper.checkCoverage()
     coverageWrapper.writeCoverageReport()
-
     
 
     if not dicResultTest["result"].wasSuccessful():
