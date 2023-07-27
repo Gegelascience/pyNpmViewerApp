@@ -135,8 +135,8 @@ class CoverageHelper:
                 cellBody.appendChild(dom.createTextNode(str(spec.get(word))))
                 lineData.appendChild(cellBody)
 
-        if not os.path.exists("htmlCov"):
-            os.mkdir("htmlCov")
-        with open ("htmlCov/index.html","w",encoding="utf-8") as coverageFileHtml:
+        if not os.path.exists("myHtmlCov"):
+            os.mkdir("myHtmlCov")
+        with open ("myHtmlCov/index.html","w",encoding="utf-8") as coverageFileHtml:
             htmlFileContent =dom.toprettyxml()
             coverageFileHtml.write(htmlFileContent.split('<?xml version="1.0" ?>\n')[1])
