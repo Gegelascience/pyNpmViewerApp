@@ -6,6 +6,9 @@ from unittest.mock import patch, Mock
 
 class NpmHelperTestCase(unittest.TestCase):
 
+    def setUp(self) -> None:
+        self.myNpmWrapper = NpmHelper()
+
     def test_getListIntervalOneYearNpm_Ok(self):
         startDate = datetime.strptime("01/01/1995", "%d/%m/%Y")
         endDate = datetime.strptime("01/01/1996", "%d/%m/%Y")
@@ -35,7 +38,7 @@ class NpmHelperTestCase(unittest.TestCase):
                 status=200,
                 body=refData,
             )
-        integrityOk = NpmHelper.checkPackageIntegrity(fakeNpmData)
-        self.assertEqual(integrityOk,True,"Petit Msg")
+        integrityOk = self.myNpmWrapper.checkPackageIntegrity(fakeNpmData)
+        self.assertEqual(integrityOk,True,"Invalid integrity check")
 
     

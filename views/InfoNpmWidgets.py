@@ -4,8 +4,8 @@ from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
 import csv
 from Helpers.SvgHelper import saveGraphAsSvg
-
 from models.NpmModels import PackageDownloadInfo
+from Helpers.ConfigurationFileParser import ConfigurationFileData
 
 class InfoPackageWidget(Frame):
     """
@@ -17,15 +17,16 @@ class InfoPackageWidget(Frame):
         super().__init__(parent)
 
         # fenetre fond blanc
-        self.configure(bg='white')
+        myConfigParser = ConfigurationFileData("config.properties","dev")
+        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
 
         self.data = packageInfo
         
         ttk.Label(self,text= self.data.name).pack(pady=(20,10))
 
-        generalDataContainer = Frame(self,background="white")
+        generalDataContainer = Frame(self,background=myConfigParser.getconfkey("color.secondary"))
 
-        columnLabel = Frame(generalDataContainer,background="white")
+        columnLabel = Frame(generalDataContainer,background=myConfigParser.getconfkey("color.secondary"))
 
         ttk.Label(columnLabel,text="Contributeurs: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
@@ -36,7 +37,7 @@ class InfoPackageWidget(Frame):
         ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Integrité \n(dernière version): ").pack(anchor="w")
 
-        columnValue = Frame(generalDataContainer,background="white")
+        columnValue = Frame(generalDataContainer,background=myConfigParser.getconfkey("color.secondary"))
         ttk.Label(columnValue,text=self.data.contributors).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
@@ -75,7 +76,8 @@ class ReadMeViewerWidget(Frame):
         super().__init__(parent)
 
         # fenetre fond blanc
-        self.configure(bg='white')
+        myConfigParser = ConfigurationFileData("config.properties","dev")
+        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
 
         ttk.Label(self,text= packageInfo.name).pack(pady=(20,10))
 
@@ -103,7 +105,8 @@ class GraphDownloadsWidget(Frame):
         super().__init__(parent)
 
         # fenetre fond blanc
-        self.configure(bg='white')
+        myConfigParser = ConfigurationFileData("config.properties","dev")
+        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
 
         # retour etat traitement
         self.infoError = StringVar()
@@ -136,15 +139,16 @@ class GraphDownloadsWidget(Frame):
         maxValue = max(listDownload.downloads)
         minValue = min(listDownload.downloads)
 
+        myConfigParser = ConfigurationFileData("config.properties","dev")
         ttk.Label(self,text=graphTitle).pack()
-        graph = Canvas(self,height=120,width=425, background="white")
+        graph = Canvas(self,height=120,width=425, background=myConfigParser.getconfkey("color.secondary"))
         graph.pack(fill=X,pady=padding)
             
         for i,dayStat in enumerate(listDownload.downloads):
             if dayStat in (minValue,maxValue):
                 graph.create_text(i*interValueSpace + 5,10,text=dayStat)
             if i > 0:
-                graph.create_line((i-1)*interValueSpace + 5, 20+(maxValue-listDownload.downloads[i-1])*100/maxValue, i*interValueSpace + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill="red")
+                graph.create_line((i-1)*interValueSpace + 5, 20+(maxValue-listDownload.downloads[i-1])*100/maxValue, i*interValueSpace + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill=myConfigParser.getconfkey("color.primary"))
 
 
     def exportDownloadReport(self):

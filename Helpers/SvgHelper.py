@@ -13,7 +13,6 @@ def saveGraphAsSvg(data:PackageDownloadInfo,filepath:str):
     
     root = ET.XML(initialStr)
     graphZone = ET.SubElement(root,"g")
-    #graphZone.set("stroke", "red")
 
     for i,dayStat in enumerate(data.downloads):
         if dayStat in (minValue,maxValue):

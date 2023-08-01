@@ -4,6 +4,7 @@ from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeVi
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
 from Helpers.PngHelper import PngBuilder
+from Helpers.ConfigurationFileParser import ConfigurationFileData
 
 def addLoader(parentFrame: Frame):
 	"""
@@ -42,22 +43,25 @@ class MyApp(Tk):
 		super().__init__()
 		
 		self.title("Informations Package NPM")
-		self.geometry('600x800')
+
+		myConfigParser = ConfigurationFileData("config.properties","dev")
+
+		self.geometry(myConfigParser.getconfkey("window.main.size"))
 
 		# fenetre fond blanc
-		self.configure(bg='white')
+		self.configure(bg=myConfigParser.getconfkey("color.secondary"))
 
 		# Create an instance of ttk style
 		s = ttk.Style()
 		s.theme_use('default')
-		s.configure('TNotebook.Tab', background="white")
-		s.map("TNotebook.Tab", background= [("selected", "red")])
-		s.map("TNotebook.Tab", foreground= [("selected", "white")])
+		s.configure('TNotebook.Tab', background=myConfigParser.getconfkey("color.secondary"))
+		s.map("TNotebook.Tab", background= [("selected", myConfigParser.getconfkey("color.primary"))])
+		s.map("TNotebook.Tab", foreground= [("selected", myConfigParser.getconfkey("color.secondary"))])
 
-		s.configure('TNotebook', background="white")
-		s.configure('TFrame', background="white")
-		s.configure('TLabel', background="white")
-		s.configure("TButton", background="red", foreground="white",pady=10)
+		s.configure('TNotebook', background=myConfigParser.getconfkey("color.secondary"))
+		s.configure('TFrame', background=myConfigParser.getconfkey("color.secondary"))
+		s.configure('TLabel', background=myConfigParser.getconfkey("color.secondary"))
+		s.configure("TButton", background=myConfigParser.getconfkey("color.primary"), foreground=myConfigParser.getconfkey("color.secondary"),pady=10)
 
 
 		# customisation de l'icone
@@ -113,7 +117,7 @@ class MyApp(Tk):
 			child.destroy()
 		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays,listDownloadsThirty).pack()	
 
-	def showPopupError(self, message):
+	def showPopupError(self, message="Une erreur est survenue"):
 		"""
 		Show error popup
 		"""
