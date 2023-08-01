@@ -5,7 +5,7 @@ import urllib.parse
 import urllib.request
 from email.message import Message
 import base64
-
+from socket import timeout
 
 class ResponseWrapper(typing.NamedTuple):
     body: bytes | str
@@ -93,7 +93,7 @@ def requestWrapper(
     httprequest = urllib.request.Request(url, data=request_data, headers=headers, method=method)
 
     try:
-        with urllib.request.urlopen(httprequest) as httpresponse:
+        with urllib.request.urlopen(httprequest, timeout=60) as httpresponse:
             response = ResponseWrapper(
                 headers=httpresponse.headers,
                 status=httpresponse.status,
@@ -104,6 +104,27 @@ def requestWrapper(
             body=str(e.reason),
             headers=e.headers,
             status=e.code,
+            error_count=error_count + 1,
+        )
+    except timeout:
+        response = ResponseWrapper(
+            body="Timeout",
+            headers=None,
+            status=504,
+            error_count=error_count + 1,
+        )
+    except urllib.error.URLError as e:
+        response = ResponseWrapper(
+            body=str(e.reason),
+            headers=None,
+            status=500,
+            error_count=error_count + 1,
+        )
+    except Exception as e:
+        response = ResponseWrapper(
+            body=str(e),
+            headers=None,
+            status=500,
             error_count=error_count + 1,
         )
 
