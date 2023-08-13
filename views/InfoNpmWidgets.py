@@ -124,7 +124,7 @@ class GraphDownloadsWidget(Frame):
 
         if listDownloadsThirty:
             self.drawDownloadGraph(listDownloadsThirty,14,"30 derniers jours")
-            self.listData = [{"Téléchagements":d} for d in listDownloadsThirty.downloads]
+            self.listData = [{"Jour":listDownloadsThirty.days[i],"Téléchagements":download} for i,download in enumerate(listDownloadsThirty.downloads)]
             self.last30days = listDownloadsThirty
 
             btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
@@ -158,7 +158,7 @@ class GraphDownloadsWidget(Frame):
         targetFilename = filedialog.asksaveasfilename(filetypes=[("csv file","*.csv")], defaultextension=".csv",initialfile="downloadNpm.csv", title="Télécharger le rapport")
         if targetFilename:
             with open(targetFilename,mode="w", encoding='utf-8',newline='') as report:
-                dictWriter = csv.DictWriter(report,fieldnames=["Téléchagements"])
+                dictWriter = csv.DictWriter(report,fieldnames=["Jour","Téléchagements"])
                 dictWriter.writeheader()
                 for row in self.listData:
                     dictWriter.writerow(row)

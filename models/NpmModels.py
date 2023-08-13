@@ -44,7 +44,9 @@ class PackageDownloadInfo:
         self.end:str = rawData["end"]
         self.name:str = rawData["package"]
         listDownload = []
+        listDays = []
         for download in rawData["downloads"]:
             listDownload.append(download["downloads"])
-
+            listDays.append(download["day"])
         self.downloads = listDownload
+        self.days = listDays
