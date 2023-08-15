@@ -3,7 +3,7 @@ from tkinter import ttk,filedialog
 from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
 import csv
-from Helpers.SvgHelper import saveGraphAsSvg
+from Helpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
 from Helpers.ConfigurationFileParser import ConfigurationFileData
 
@@ -99,7 +99,6 @@ class GraphDownloadsWidget(Frame):
     Frame to display package download informations
     """
     listData:list
-    last30days:PackageDownloadInfo
     
     def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:PackageDownloadInfo, listDownloadsThirty:PackageDownloadInfo):
         super().__init__(parent)
@@ -118,37 +117,23 @@ class GraphDownloadsWidget(Frame):
         
         if not listDownloadsSeven and not listDownloadsThirty:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
+
+        primaryColor =myConfigParser.getconfkey("color.primary")
+        secondaryColor =myConfigParser.getconfkey("color.secondary")
         
         if listDownloadsSeven:
-            self.drawDownloadGraph(listDownloadsSeven,51,"7 derniers jours",(0,50))
+            self.lineChartSeven = LineChartWrapper(listDownloadsSeven.downloads)
+            self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,50))
 
         if listDownloadsThirty:
-            self.drawDownloadGraph(listDownloadsThirty,14,"30 derniers jours")
+            self.lineChart30 = LineChartWrapper(listDownloadsThirty.downloads)
+            self.lineChart30.drawCanvas("30 derniers jours",self,14,primaryColor, secondaryColor)
+
             self.listData = [{"Jour":listDownloadsThirty.days[i],"Téléchagements":download} for i,download in enumerate(listDownloadsThirty.downloads)]
-            self.last30days = listDownloadsThirty
 
             btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
             btnReport.bind('<Return>', self.exportDownloadReport)
             btnReport.pack(pady=(10,0))
-        
-
-    def drawDownloadGraph(self,listDownload:PackageDownloadInfo, interValueSpace:int, graphTitle:str, padding:tuple=(0,0)):
-        """
-        Draw a graph to represent download evolution
-        """
-        maxValue = max(listDownload.downloads)
-        minValue = min(listDownload.downloads)
-
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        ttk.Label(self,text=graphTitle).pack()
-        graph = Canvas(self,height=120,width=425, background=myConfigParser.getconfkey("color.secondary"))
-        graph.pack(fill=X,pady=padding)
-            
-        for i,dayStat in enumerate(listDownload.downloads):
-            if dayStat in (minValue,maxValue):
-                graph.create_text(i*interValueSpace + 5,10,text=dayStat)
-            if i > 0:
-                graph.create_line((i-1)*interValueSpace + 5, 20+(maxValue-listDownload.downloads[i-1])*100/maxValue, i*interValueSpace + 5, 20+(maxValue-dayStat)*100/maxValue,width=3, fill=myConfigParser.getconfkey("color.primary"))
 
 
     def exportDownloadReport(self):
@@ -162,6 +147,6 @@ class GraphDownloadsWidget(Frame):
                 dictWriter.writeheader()
                 for row in self.listData:
                     dictWriter.writerow(row)
-            
-            saveGraphAsSvg(self.last30days,targetFilename.replace(".csv",".svg"))
+
+            self.lineChart30.saveAsSvg(targetFilename.replace(".csv",".svg"))
 
