@@ -1,5 +1,4 @@
-from tkinter import Tk, ttk
-from tkinter import *
+from tkinter import ttk, Toplevel, Frame, Canvas
 from Helpers.ConfigurationFileParser import ConfigurationFileData
 
 class ErrorPopup(Toplevel):

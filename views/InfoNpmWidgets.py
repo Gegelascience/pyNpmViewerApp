@@ -1,5 +1,4 @@
-from tkinter import *
-from tkinter import ttk,filedialog
+from tkinter import ttk,filedialog, Frame, LEFT,Scrollbar, Text, END,BOTH,StringVar
 from Helpers.NpmHelper import PackageDataInfo
 import webbrowser
 import csv

@@ -1,5 +1,4 @@
-from tkinter import Tk, ttk, PhotoImage
-from tkinter import *
+from tkinter import Tk, ttk, PhotoImage, Frame, StringVar
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
