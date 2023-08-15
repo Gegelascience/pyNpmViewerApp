@@ -95,11 +95,25 @@ class MyApp(Tk):
 	def showInformation(self, event=None):
 		packageName = self.package.get()
 		if len(packageName) > 0 :
-			npmThread = GetNpmDataThread(self,packageName)
+			npmThread = GetNpmDataThread(packageName)
 			addLoader(self.tabInfo)
 			addLoader(self.tabReadMe)
 			addLoader(self.tabDownload)
 			npmThread.start()
+			self.scheduleCheckThread(npmThread)
+
+	def scheduleCheckThread(self,threadNpm:GetNpmDataThread):
+		self.after(1000, self.checkDataReady, threadNpm)
+
+	def checkDataReady(self, threadNpm:GetNpmDataThread):
+		if not threadNpm.is_alive():
+			if threadNpm.hasError:
+				self.showPopupError(threadNpm.errMsg)
+			else:
+				self.updateGeneralInfoTab(threadNpm.dataToShow)
+				self.updateDownloadInfoTab(threadNpm.dataToShow,threadNpm.nbTotalDownload,threadNpm.listDownloadsSeven,threadNpm.listDownloadsThirty)
+		else:
+			self.scheduleCheckThread(threadNpm)
 
 	def updateGeneralInfoTab(self, dataFromNpm):
 		for child in self.tabInfo.winfo_children():

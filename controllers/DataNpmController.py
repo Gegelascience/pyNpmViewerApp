@@ -3,48 +3,53 @@ from threading import Thread
 from datetime import datetime
 from models.CustomExceptions import UnpublishedPackage
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from NpmViewerApp import MyApp
-
-
-
 
 class GetNpmDataThread(Thread):
     """
     Thread to get npm data
     """
-    def __init__(self, app2Update:"MyApp",npmPackage:str ):
+    def __init__(self,npmPackage:str ):
         super().__init__()
-        self.gui = app2Update
+        #self.gui = app2Update
         self.packageName =npmPackage
+        self.dataToShow = None
+        self.listDownloadsSeven = None
+        self.listDownloadsThirty = None
+        self.hasError = False
+        self.errMsg = ""
+        self.nbTotalDownload = 0
+
 
 
     def run(self):
         npmInfoClient = NpmHelper()
         try:
-            dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
-            if not dataToShow:
-                self.gui.after(0,self.gui.showPopupError())
+            self.dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
+            if not self.dataToShow:
+                #self.gui.after(0,self.gui.showPopupError())
+                self.hasError = True
+                self.errMsg = "Une erreur est survenue dans la récupération des données"
             else:
-                self.gui.after(0, self.gui.updateGeneralInfoTab(dataToShow))
+                #self.gui.after(0, self.gui.updateGeneralInfoTab(dataToShow))
                 now = datetime.now()
-                createdAt = datetime.strptime(dataToShow.createdDate,"%d/%m/%Y")
+                createdAt = datetime.strptime(self.dataToShow.createdDate,"%d/%m/%Y")
 
-                nbTotalDownload = 0
+                
                 listInterval =NpmHelper.getListIntervalOneYearNpm(createdAt,now)
                 for interval in listInterval:
-                    downloadTmp = npmInfoClient.getDownloadBetween2Date(dataToShow.name,interval.get("start"), interval.get("end"))
+                    downloadTmp = npmInfoClient.getDownloadBetween2Date(self.dataToShow.name,interval.get("start"), interval.get("end"))
                     if downloadTmp:
-                        nbTotalDownload += sum(downloadTmp.downloads)
+                        self.nbTotalDownload += sum(downloadTmp.downloads)
 
                 # get last 7 days graph
-                listDownloadsSeven = npmInfoClient.getLast7daysDownload(dataToShow.name)
+                self.listDownloadsSeven = npmInfoClient.getLast7daysDownload(self.dataToShow.name)
 
-                listDownloadsThirty = npmInfoClient.getLast30daysDownload(dataToShow.name)
-
-                self.gui.after(0, self.gui.updateDownloadInfoTab(dataToShow,nbTotalDownload,listDownloadsSeven,listDownloadsThirty))
+                self.listDownloadsThirty = npmInfoClient.getLast30daysDownload(self.dataToShow.name)
 
         except UnpublishedPackage as ex:
-            self.gui.after(0,self.gui.showPopupError(ex.message))
+            self.hasError = True
+            self.errMsg = ex.message
+
+        except Exception as e:
+            self.hasError = True
+            self.errMsg = e.message
