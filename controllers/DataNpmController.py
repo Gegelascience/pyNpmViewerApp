@@ -13,7 +13,6 @@ class GetNpmDataThread(Thread):
         #self.gui = app2Update
         self.packageName =npmPackage
         self.dataToShow = None
-        self.listDownloadsSeven = None
         self.listDownloadsThirty = None
         self.hasError = False
         self.errMsg = ""
@@ -41,10 +40,9 @@ class GetNpmDataThread(Thread):
                     if downloadTmp:
                         self.nbTotalDownload += sum(downloadTmp.downloads)
 
-                # get last 7 days graph
-                self.listDownloadsSeven = npmInfoClient.getLast7daysDownload(self.dataToShow.name)
-
+                # get last 30 days
                 self.listDownloadsThirty = npmInfoClient.getLast30daysDownload(self.dataToShow.name)
+                
 
         except UnpublishedPackage as ex:
             self.hasError = True

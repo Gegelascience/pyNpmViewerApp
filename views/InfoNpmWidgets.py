@@ -6,6 +6,7 @@ import csv
 from Helpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
 from Helpers.ConfigurationFileParser import ConfigurationFileData
+import copy
 
 class InfoPackageWidget(Frame):
     """
@@ -100,7 +101,7 @@ class GraphDownloadsWidget(Frame):
     """
     listData:list
     
-    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload,listDownloadsSeven:PackageDownloadInfo, listDownloadsThirty:PackageDownloadInfo):
+    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload:int, listDownloadsThirty:PackageDownloadInfo):
         super().__init__(parent)
 
         # fenetre fond blanc
@@ -115,17 +116,22 @@ class GraphDownloadsWidget(Frame):
         ttk.Label(self,text="Total: " + str(nbTotalDownload)).pack(pady=(0,50))
 
         
-        if not listDownloadsSeven and not listDownloadsThirty:
+        if not listDownloadsThirty:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
 
         primaryColor =myConfigParser.getconfkey("color.primary")
         secondaryColor =myConfigParser.getconfkey("color.secondary")
-        
-        if listDownloadsSeven:
-            self.lineChartSeven = LineChartWrapper(listDownloadsSeven.downloads)
+            
+        if listDownloadsThirty:
+
+            tmpSeven = copy.deepcopy(listDownloadsThirty)
+            tmpSeven.downloads = tmpSeven.downloads[-7:]
+            tmpSeven.days = tmpSeven.days[-7:]
+
+            self.lineChartSeven = LineChartWrapper(tmpSeven.downloads)
             self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,50))
 
-        if listDownloadsThirty:
+
             self.lineChart30 = LineChartWrapper(listDownloadsThirty.downloads)
             self.lineChart30.drawCanvas("30 derniers jours",self,14,primaryColor, secondaryColor)
 

@@ -111,7 +111,7 @@ class MyApp(Tk):
 				self.showPopupError(threadNpm.errMsg)
 			else:
 				self.updateGeneralInfoTab(threadNpm.dataToShow)
-				self.updateDownloadInfoTab(threadNpm.dataToShow,threadNpm.nbTotalDownload,threadNpm.listDownloadsSeven,threadNpm.listDownloadsThirty)
+				self.updateDownloadInfoTab(threadNpm.dataToShow,threadNpm.nbTotalDownload,threadNpm.listDownloadsThirty)
 		else:
 			self.scheduleCheckThread(threadNpm)
 
@@ -123,13 +123,13 @@ class MyApp(Tk):
 			child.destroy()
 		ReadMeViewerWidget(self.tabReadMe, dataFromNpm).pack()
 
-	def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload, lastSevenDays,listDownloadsThirty):
+	def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload,listDownloadsThirty):
 		"""
 		Show tab with package download informations
 		"""
 		for child in self.tabDownload.winfo_children():
 			child.destroy()
-		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,lastSevenDays,listDownloadsThirty).pack()	
+		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,listDownloadsThirty).pack()	
 
 	def showPopupError(self, message="Une erreur est survenue"):
 		"""
