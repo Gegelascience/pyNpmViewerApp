@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.CustomExceptions import UnpublishedPackage
+from dataclasses import dataclass
 
 class PackageDataInfo:
 
@@ -37,16 +38,11 @@ class PackageDataInfo:
 
         self.lastVersionIntegrity = isPackageIntegrityOk
 
+@dataclass
 class PackageDownloadInfo:
+    start:str
+    end:str
+    name:str
+    listDownload: list
+    listDays: list
     
-    def __init__(self, rawData: dict):
-        self.start:str = rawData["start"]
-        self.end:str = rawData["end"]
-        self.name:str = rawData["package"]
-        listDownload = []
-        listDays = []
-        for download in rawData["downloads"]:
-            listDownload.append(download["downloads"])
-            listDays.append(download["day"])
-        self.downloads = listDownload
-        self.days = listDays

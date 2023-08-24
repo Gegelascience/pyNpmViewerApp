@@ -32,7 +32,9 @@ class NpmHelper:
             try:
                 possibleData = rawResponse.json()
                 if len(possibleData) > 0:
-                    return PackageDownloadInfo(possibleData)
+                    downloadsNb = [download.get("downloads") for download in possibleData.get("downloads")]
+                    downloadsDays = [download.get("day") for download in possibleData.get("downloads")]
+                    return PackageDownloadInfo(possibleData.get("start"),possibleData.get("end"),possibleData.get("package"),downloadsNb,downloadsDays)
             except:
                 return None
         else:
@@ -47,7 +49,9 @@ class NpmHelper:
             try:
                 possibleData = rawResponse.json()
                 if len(possibleData) > 0:
-                    return PackageDownloadInfo(possibleData)
+                    downloadsNb = [download.get("downloads") for download in possibleData.get("downloads")]
+                    downloadsDays = [download.get("day") for download in possibleData.get("downloads")]
+                    return PackageDownloadInfo(possibleData.get("start"),possibleData.get("end"),possibleData.get("package"),downloadsNb,downloadsDays)
             except:
                 return None
         else:
@@ -63,7 +67,9 @@ class NpmHelper:
             try:
                 possibleData = rawResponse.json()
                 if len(possibleData) > 0:
-                    return PackageDownloadInfo(possibleData)
+                    downloadsNb = [download.get("downloads") for download in possibleData.get("downloads")]
+                    downloadsDays = [download.get("day") for download in possibleData.get("downloads")]
+                    return PackageDownloadInfo(possibleData.get("start"),possibleData.get("end"),possibleData.get("package"),downloadsNb,downloadsDays)
             except:
                 return None
         else:
