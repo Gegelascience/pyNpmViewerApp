@@ -38,7 +38,7 @@ class GetNpmDataThread(Thread):
                 for interval in listInterval:
                     downloadTmp = npmInfoClient.getDownloadBetween2Date(self.dataToShow.name,interval.get("start"), interval.get("end"))
                     if downloadTmp:
-                        self.nbTotalDownload += sum(downloadTmp.downloads)
+                        self.nbTotalDownload += sum(downloadTmp.listDownload)
 
                 # get last 30 days
                 self.listDownloadsThirty = npmInfoClient.getLast30daysDownload(self.dataToShow.name)
@@ -50,4 +50,4 @@ class GetNpmDataThread(Thread):
 
         except Exception as e:
             self.hasError = True
-            self.errMsg = e.message
+            self.errMsg = str(e)

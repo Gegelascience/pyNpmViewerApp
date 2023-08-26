@@ -6,6 +6,7 @@ from Helpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
 from Helpers.ConfigurationFileParser import ConfigurationFileData
 import copy
+from statistics import mean
 
 class InfoPackageWidget(Frame):
     """
@@ -124,17 +125,20 @@ class GraphDownloadsWidget(Frame):
         if listDownloadsThirty:
 
             tmpSeven = copy.deepcopy(listDownloadsThirty)
-            tmpSeven.downloads = tmpSeven.downloads[-7:]
-            tmpSeven.days = tmpSeven.days[-7:]
+            tmpSeven.listDownload = tmpSeven.listDownload[-7:]
+            tmpSeven.listDays = tmpSeven.listDays[-7:]
 
-            self.lineChartSeven = LineChartWrapper(tmpSeven.downloads)
-            self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,50))
+            self.lineChartSeven = LineChartWrapper(tmpSeven.listDownload)
+            self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,0))
 
+            ttk.Label(self, text="Moyenne: " + str(mean(tmpSeven.listDownload))).pack(pady=(10,20))
 
-            self.lineChart30 = LineChartWrapper(listDownloadsThirty.downloads)
+            self.lineChart30 = LineChartWrapper(listDownloadsThirty.listDownload)
             self.lineChart30.drawCanvas("30 derniers jours",self,14,primaryColor, secondaryColor)
 
-            self.listData = [{"Jour":listDownloadsThirty.days[i],"Téléchagements":download} for i,download in enumerate(listDownloadsThirty.downloads)]
+            ttk.Label(self, text="Moyenne: " + str(mean(listDownloadsThirty.listDownload))).pack(pady=(10,20))
+
+            self.listData = [{"Jour":listDownloadsThirty.listDays[i],"Téléchagements":download} for i,download in enumerate(listDownloadsThirty.listDownload)]
 
             btnReport = ttk.Button(self, text="Exporter", command=self.exportDownloadReport)
             btnReport.bind('<Return>', self.exportDownloadReport)
