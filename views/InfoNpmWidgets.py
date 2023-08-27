@@ -131,12 +131,12 @@ class GraphDownloadsWidget(Frame):
             self.lineChartSeven = LineChartWrapper(tmpSeven.listDownload)
             self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,0))
 
-            ttk.Label(self, text="Moyenne: " + str(mean(tmpSeven.listDownload))).pack(pady=(10,20))
+            ttk.Label(self, text="Moyenne: " + str(round(mean(tmpSeven.listDownload),1))).pack(pady=(10,20))
 
             self.lineChart30 = LineChartWrapper(listDownloadsThirty.listDownload)
             self.lineChart30.drawCanvas("30 derniers jours",self,14,primaryColor, secondaryColor)
 
-            ttk.Label(self, text="Moyenne: " + str(mean(listDownloadsThirty.listDownload))).pack(pady=(10,20))
+            ttk.Label(self, text="Moyenne: " + str(round(mean(listDownloadsThirty.listDownload),1))).pack(pady=(10,20))
 
             self.listData = [{"Jour":listDownloadsThirty.listDays[i],"Téléchagements":download} for i,download in enumerate(listDownloadsThirty.listDownload)]
 
