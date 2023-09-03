@@ -4,6 +4,7 @@ import webbrowser
 import csv
 from Helpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
+from models.GuiModels import UIOptions
 from Helpers.ConfigurationFileParser import ConfigurationFileData
 import copy
 from statistics import mean
@@ -14,20 +15,19 @@ class InfoPackageWidget(Frame):
     """
     data:PackageDataInfo
 
-    def __init__(self,parent, packageInfo:PackageDataInfo):
+    def __init__(self,parent, packageInfo:PackageDataInfo,options:UIOptions):
         super().__init__(parent)
 
         # fenetre fond blanc
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+        self.configure(bg=options.colorSecondary)
 
         self.data = packageInfo
         
         ttk.Label(self,text= self.data.name).pack(pady=(20,10))
 
-        generalDataContainer = Frame(self,background=myConfigParser.getconfkey("color.secondary"))
+        generalDataContainer = Frame(self,background=options.colorSecondary)
 
-        columnLabel = Frame(generalDataContainer,background=myConfigParser.getconfkey("color.secondary"))
+        columnLabel = Frame(generalDataContainer,background=options.colorSecondary)
 
         ttk.Label(columnLabel,text="Contributeurs: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Date de création: ").pack(anchor="w")
@@ -38,7 +38,7 @@ class InfoPackageWidget(Frame):
         ttk.Label(columnLabel,text="Mots clés: ").pack(anchor="w")
         ttk.Label(columnLabel,text="Integrité \n(dernière version): ").pack(anchor="w")
 
-        columnValue = Frame(generalDataContainer,background=myConfigParser.getconfkey("color.secondary"))
+        columnValue = Frame(generalDataContainer,background=options.colorSecondary)
         ttk.Label(columnValue,text=self.data.contributors).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.createdDate).pack(anchor="w")
         ttk.Label(columnValue,text=self.data.version).pack(anchor="w")
@@ -73,12 +73,11 @@ class ReadMeViewerWidget(Frame):
     Frame to display package readme content
     """
 
-    def __init__(self,parent,packageInfo:PackageDataInfo):
+    def __init__(self,parent,packageInfo:PackageDataInfo,options:UIOptions):
         super().__init__(parent)
 
         # fenetre fond blanc
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+        self.configure(bg=options.colorSecondary)
 
         ttk.Label(self,text= packageInfo.name).pack(pady=(20,10))
 
@@ -101,12 +100,11 @@ class GraphDownloadsWidget(Frame):
     """
     listData:list
     
-    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload:int, listDownloadsThirty:PackageDownloadInfo):
+    def __init__(self,parent, packageInfo:PackageDataInfo,nbTotalDownload:int, listDownloadsThirty:PackageDownloadInfo,options:UIOptions):
         super().__init__(parent)
 
         # fenetre fond blanc
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+        self.configure(bg=options.colorSecondary)
 
         # retour etat traitement
         self.infoError = StringVar()
@@ -119,8 +117,6 @@ class GraphDownloadsWidget(Frame):
         if not listDownloadsThirty:
             self.infoError.set("Impossible de trouver des infos sur " + packageInfo.name)
 
-        primaryColor =myConfigParser.getconfkey("color.primary")
-        secondaryColor =myConfigParser.getconfkey("color.secondary")
             
         if listDownloadsThirty:
 
@@ -129,12 +125,12 @@ class GraphDownloadsWidget(Frame):
             tmpSeven.listDays = tmpSeven.listDays[-7:]
 
             self.lineChartSeven = LineChartWrapper(tmpSeven.listDownload)
-            self.lineChartSeven.drawCanvas("7 derniers jours",self,51,primaryColor, secondaryColor,(0,0))
+            self.lineChartSeven.drawCanvas("7 derniers jours",self,51,options.colorPrimary, options.colorSecondary,(0,0))
 
             ttk.Label(self, text="Moyenne: " + str(round(mean(tmpSeven.listDownload),1))).pack(pady=(10,20))
 
             self.lineChart30 = LineChartWrapper(listDownloadsThirty.listDownload)
-            self.lineChart30.drawCanvas("30 derniers jours",self,14,primaryColor, secondaryColor)
+            self.lineChart30.drawCanvas("30 derniers jours",self,14,options.colorPrimary, options.colorSecondary)
 
             ttk.Label(self, text="Moyenne: " + str(round(mean(listDownloadsThirty.listDownload),1))).pack(pady=(10,20))
 

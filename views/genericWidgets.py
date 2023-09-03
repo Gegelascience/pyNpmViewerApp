@@ -1,19 +1,20 @@
 from tkinter import ttk, Toplevel, Frame, Canvas
 from Helpers.ConfigurationFileParser import ConfigurationFileData
+from models.GuiModels import UIOptions
 
 class ErrorPopup(Toplevel):
     """
     Popup d'erreur
     """
-    def __init__(self, parent, textError:str="Une erreur est survenue"):
+    def __init__(self, parent, options:UIOptions=UIOptions(), textError:str="Une erreur est survenue"):
         super().__init__(parent)
         self.title("ERREUR")
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        self.geometry(myConfigParser.getconfkey("window.popin.size"))
+        
+        self.geometry(options.windowPopinSize)
 
         # fenetre fond blanc
         
-        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+        self.configure(bg=options.colorSecondary)
 
         ttk.Label(self,text=textError).pack(pady=(20,0))
         
@@ -25,19 +26,19 @@ class LoaderFrame(Frame):
     """
     loaderIconCanvas:Canvas
 
-    def __init__(self,parent:Frame):
+    def __init__(self,parent:Frame, options:UIOptions=UIOptions()):
         super().__init__(parent)
+        self.options = options
 
         # fenetre fond blanc
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+        self.configure(bg=self.options.colorSecondary)
 
         self.zoneLoader = 0
         ttk.Label(self,text="Récupération en cours").pack(pady=(20,10))
 
         self.loaderIconCanvas = Canvas(self, width=150, height=100)
 
-        self.loaderIconCanvas.configure(bg=myConfigParser.getconfkey("color.secondary"),highlightthickness=0)
+        self.loaderIconCanvas.configure(bg=self.options.colorSecondary,highlightthickness=0)
 
         self.loaderIconCanvas.pack()
 
@@ -54,8 +55,7 @@ class LoaderFrame(Frame):
         yPoint=0
         length=50
 
-        myConfigParser = ConfigurationFileData("config.properties","dev")
-        item=self.loaderIconCanvas.create_rectangle(xPoint, yPoint, xPoint+length, yPoint+length, fill=myConfigParser.getconfkey("color.primary"), outline='')
+        item=self.loaderIconCanvas.create_rectangle(xPoint, yPoint, xPoint+length, yPoint+length, fill=self.options.colorPrimary, outline='')
         self.zoneLoader+=1
 
         self.after(500, self.updateLoader,item)

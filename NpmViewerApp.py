@@ -4,14 +4,34 @@ from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
 from Helpers.PngHelper import PngBuilder
 from Helpers.ConfigurationFileParser import ConfigurationFileData
+from models.GuiModels import UIOptions
 
-def addLoader(parentFrame: Frame):
+
+def getGUIOptions(configFilePath:str, section:str):
+	try:
+		myConfigParser = ConfigurationFileData(configFilePath,section)
+		myOptions = UIOptions()
+
+		if myConfigParser.getconfkey("window.main.size"):
+			myOptions.windowMainSize =myConfigParser.getconfkey("window.main.size")
+		if myConfigParser.getconfkey("window.popin.size"):
+			myOptions.windowPopinSize = myConfigParser.getconfkey("window.popin.size")
+		if myConfigParser.getconfkey("color.primary"):
+			myOptions.colorPrimary = myConfigParser.getconfkey("color.primary")
+		if myConfigParser.getconfkey("window.popin.size"):
+			myOptions.colorSecondary = myConfigParser.getconfkey("color.secondary")
+		
+		return myOptions
+	except:
+		return UIOptions()
+
+def addLoader(parentFrame: Frame, options:UIOptions):
 	"""
 	Add a loader Frame to a parent Frame
 	"""
 	for child in parentFrame.winfo_children():
 		child.destroy()
-	LoaderFrame(parentFrame).pack()
+	LoaderFrame(parentFrame,options).pack()
 
 def generateIconImg() -> PhotoImage:
 	actualData = []
@@ -38,29 +58,29 @@ class MyApp(Tk):
 	App Class
 	"""
 
-	def __init__(self):
+	def __init__(self, options:UIOptions):
 		super().__init__()
 		
 		self.title("Informations Package NPM")
 
-		myConfigParser = ConfigurationFileData("config.properties","dev")
+		self.options =options
 
-		self.geometry(myConfigParser.getconfkey("window.main.size"))
+		self.geometry(self.options.windowMainSize)
 
 		# fenetre fond blanc
-		self.configure(bg=myConfigParser.getconfkey("color.secondary"))
+		self.configure(bg=self.options.colorSecondary)
 
 		# Create an instance of ttk style
 		s = ttk.Style()
 		s.theme_use('default')
-		s.configure('TNotebook.Tab', background=myConfigParser.getconfkey("color.secondary"))
-		s.map("TNotebook.Tab", background= [("selected", myConfigParser.getconfkey("color.primary"))])
-		s.map("TNotebook.Tab", foreground= [("selected", myConfigParser.getconfkey("color.secondary"))])
+		s.configure('TNotebook.Tab', background=self.options.colorSecondary)
+		s.map("TNotebook.Tab", background= [("selected", self.options.colorPrimary)])
+		s.map("TNotebook.Tab", foreground= [("selected", self.options.colorSecondary)])
 
-		s.configure('TNotebook', background=myConfigParser.getconfkey("color.secondary"))
-		s.configure('TFrame', background=myConfigParser.getconfkey("color.secondary"))
-		s.configure('TLabel', background=myConfigParser.getconfkey("color.secondary"))
-		s.configure("TButton", background=myConfigParser.getconfkey("color.primary"), foreground=myConfigParser.getconfkey("color.secondary"),pady=10)
+		s.configure('TNotebook', background=self.options.colorSecondary)
+		s.configure('TFrame', background=self.options.colorSecondary)
+		s.configure('TLabel', background=self.options.colorSecondary)
+		s.configure("TButton", background=self.options.colorPrimary, foreground=self.options.colorSecondary,pady=10)
 
 
 		# customisation de l'icone
@@ -95,9 +115,9 @@ class MyApp(Tk):
 		packageName = self.package.get()
 		if len(packageName) > 0 :
 			npmThread = GetNpmDataThread(packageName)
-			addLoader(self.tabInfo)
-			addLoader(self.tabReadMe)
-			addLoader(self.tabDownload)
+			addLoader(self.tabInfo,self.options)
+			addLoader(self.tabReadMe,self.options)
+			addLoader(self.tabDownload,self.options)
 			npmThread.start()
 			self.scheduleCheckThread(npmThread)
 
@@ -117,10 +137,10 @@ class MyApp(Tk):
 	def updateGeneralInfoTab(self, dataFromNpm):
 		for child in self.tabInfo.winfo_children():
 			child.destroy()
-		InfoPackageWidget(self.tabInfo, dataFromNpm).pack()
+		InfoPackageWidget(self.tabInfo, dataFromNpm,self.options).pack()
 		for child in self.tabReadMe.winfo_children():
 			child.destroy()
-		ReadMeViewerWidget(self.tabReadMe, dataFromNpm).pack()
+		ReadMeViewerWidget(self.tabReadMe, dataFromNpm,self.options).pack()
 
 	def updateDownloadInfoTab(self, generalDataFromNpm, sumDownload,listDownloadsThirty):
 		"""
@@ -128,17 +148,18 @@ class MyApp(Tk):
 		"""
 		for child in self.tabDownload.winfo_children():
 			child.destroy()
-		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,listDownloadsThirty).pack()	
+		GraphDownloadsWidget(self.tabDownload, generalDataFromNpm, sumDownload,listDownloadsThirty,self.options).pack()	
 
 	def showPopupError(self, message="Une erreur est survenue"):
 		"""
 		Show error popup
 		"""
-		ErrorPopup(self, message)
+		ErrorPopup(self,self.options, message)
 
 
 if __name__ == "__main__":
-	app = MyApp()
+	options= getGUIOptions("config.properties","dev")
+	app = MyApp(options)
 	app.mainloop()
 		
 
