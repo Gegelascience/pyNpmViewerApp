@@ -1,5 +1,5 @@
-from Helpers.NpmHelper import NpmHelper
-from Helpers.HttpClient import ResponseWrapper
+from appHelpers.NpmHelper import NpmHelper
+from appHelpers.HttpClient import ResponseWrapper
 import unittest
 from datetime import datetime
 from unittest.mock import patch, Mock
@@ -15,7 +15,7 @@ class NpmHelperTestCase(unittest.TestCase):
         nbYear = NpmHelper.getListIntervalOneYearNpm(startDate,endDate)
         self.assertEqual(len(nbYear),2)
 
-    @patch("Helpers.NpmHelper.requestWrapper")
+    @patch("appHelpers.NpmHelper.requestWrapper")
     def test_checkIntegrity(self, requestMock:Mock):
         fakeNpmData = {
             "dist-tags": {
@@ -31,7 +31,7 @@ class NpmHelperTestCase(unittest.TestCase):
             }
         }
 
-        with open("Helpers/tests/assets/light-cycle-1.4.3.tgz","rb") as checkFile:
+        with open("appHelpers/tests/assets/light-cycle-1.4.3.tgz","rb") as checkFile:
             refData = checkFile.read()
         requestMock.return_value = ResponseWrapper(
                 headers=None,

@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from Helpers.HttpClient import requestWrapper
+from appHelpers.HttpClient import requestWrapper
 from models.NpmModels import PackageDataInfo, PackageDownloadInfo
 import hashlib
 import base64

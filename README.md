@@ -2,6 +2,6 @@
 
 This app use only standard python 3 libs
 
-app entrypoint: NpmViewverApp.py
+app entrypoint: appRunner.py
 
 unit test entrypoint: testRunner.py

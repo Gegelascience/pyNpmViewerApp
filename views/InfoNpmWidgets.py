@@ -1,11 +1,11 @@
 from tkinter import ttk,filedialog, Frame, LEFT,Scrollbar, Text, END,BOTH,StringVar
-from Helpers.NpmHelper import PackageDataInfo
+from appHelpers.NpmHelper import PackageDataInfo
 import webbrowser
 import csv
-from Helpers.ChartHelper import LineChartWrapper
+from appHelpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
 from models.GuiModels import UIOptions
-from Helpers.ConfigurationFileParser import ConfigurationFileData
+from appHelpers.ConfigurationFileParser import ConfigurationFileData
 import copy
 from statistics import mean
 

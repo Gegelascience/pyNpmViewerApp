@@ -1,4 +1,4 @@
-from Helpers.NpmHelper import NpmHelper
+from appHelpers.NpmHelper import NpmHelper
 from threading import Thread
 from datetime import datetime
 from models.CustomExceptions import UnpublishedPackage

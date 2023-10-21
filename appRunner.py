@@ -2,8 +2,8 @@ from tkinter import Tk, ttk, PhotoImage, Frame, StringVar
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
-from Helpers.PngHelper import PngBuilder
-from Helpers.ConfigurationFileParser import ConfigurationFileData
+from appHelpers.PngHelper import PngBuilder
+from appHelpers.ConfigurationFileParser import ConfigurationFileData
 from models.GuiModels import UIOptions
 
 

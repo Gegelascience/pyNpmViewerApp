@@ -3,6 +3,7 @@ import xml.dom.minidom
 import os
 import re
 
+
 class CoverageHelper:
 
     def __init__(self,coverageDir:str) -> None:
@@ -10,10 +11,9 @@ class CoverageHelper:
         self.coverageReport = []
 
     def checkCoverage(self):
-        coverageDir = os.path.join(os.getcwd(),"tmpCoverage")
-        for el in os.listdir(coverageDir):
+        for el in os.listdir(self.coverageDir):
             if el.endswith(".cover"):
-                with open(os.path.join(coverageDir, el),encoding="utf-8") as coverfile:
+                with open(os.path.join(self.coverageDir, el),encoding="utf-8") as coverfile:
                     rawDataCover = coverfile.readlines()
                 fileRowLen = len(rawDataCover)
                 

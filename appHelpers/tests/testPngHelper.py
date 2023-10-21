@@ -1,4 +1,4 @@
-from Helpers.PngHelper import PngBuilder
+from appHelpers.PngHelper import PngBuilder
 import unittest
 from tkinter import PhotoImage, Tk
 import os
