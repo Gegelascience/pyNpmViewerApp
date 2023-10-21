@@ -5,7 +5,7 @@ from views.genericWidgets import ErrorPopup, LoaderFrame
 from appHelpers.PngHelper import PngBuilder
 from appHelpers.ConfigurationFileParser import ConfigurationFileData
 from models.GuiModels import UIOptions
-
+import argparse
 
 def getGUIOptions(configFilePath:str, section:str):
 	try:
@@ -158,7 +158,16 @@ class MyApp(Tk):
 
 
 if __name__ == "__main__":
-	options= getGUIOptions("config.properties","dev")
+
+	cmdArgParser =  argparse.ArgumentParser(description="aap to check npm package")
+	cmdArgParser.add_argument("-confp","--configpath", help="path to properties file with UI config", type=str)
+	params = cmdArgParser.parse_args()
+
+	if params.configpath:
+		options= getGUIOptions(params.configpath,"dev")
+	else:
+		options= getGUIOptions("config.properties","dev")
+
 	app = MyApp(options)
 	app.mainloop()
 		
