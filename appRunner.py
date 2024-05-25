@@ -159,7 +159,7 @@ class MyApp(Tk):
 
 if __name__ == "__main__":
 
-	cmdArgParser =  argparse.ArgumentParser(description="aap to check npm package")
+	cmdArgParser =  argparse.ArgumentParser(description="app to check npm package")
 	cmdArgParser.add_argument("-confp","--configpath", help="path to properties file with UI config", type=str)
 	params = cmdArgParser.parse_args()
 
