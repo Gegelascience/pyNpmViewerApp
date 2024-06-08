@@ -2,7 +2,7 @@
 
 class UnpublishedPackage(Exception):
 
-    def __init__(self, packageName:str,message:str ="Package déplublié") -> None:
+    def __init__(self, packageName:str) -> None:
         self.packageName = packageName
-        self.message = message
+        self.message = "Package déplublié"
         super().__init__(self.message)
