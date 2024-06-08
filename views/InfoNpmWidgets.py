@@ -5,7 +5,6 @@ import csv
 from appHelpers.ChartHelper import LineChartWrapper
 from models.NpmModels import PackageDownloadInfo
 from models.GuiModels import UIOptions
-from appHelpers.ConfigurationFileParser import ConfigurationFileData
 import copy
 from statistics import mean
 
