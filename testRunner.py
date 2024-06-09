@@ -1,4 +1,4 @@
-import appHelpers.tests as helperTestModule
+import tests as helperTestModule
 import unittest
 from io import StringIO
 import sys

@@ -6,7 +6,7 @@ import json
 
 class HttpClientTestCase(unittest.TestCase):
 
-    @patch("appHelpers.tests.testHttpClient.requestWrapper")
+    @patch("tests.testHttpClient.requestWrapper")
     def test_ResponseWrapperJsonOk(self, mock_requestWrapper: Mock):
         mock_requestWrapper.return_value = ResponseWrapper(
                 headers=None,
@@ -19,7 +19,7 @@ class HttpClientTestCase(unittest.TestCase):
         self.assertIsInstance(response.json(), dict)
 
 
-    @patch("appHelpers.tests.testHttpClient.requestWrapper")
+    @patch("tests.testHttpClient.requestWrapper")
     def test_ResponseWrapperTextOk(self, mock_requestWrapper: Mock):
         headersMock = Message()
         headersMock.add_header("Content-Type","text/html")
@@ -32,7 +32,7 @@ class HttpClientTestCase(unittest.TestCase):
         mock_requestWrapper.assert_called_once()
         self.assertIsInstance(response.text(),str)
 
-    @patch("appHelpers.tests.testHttpClient.requestWrapper")
+    @patch("tests.testHttpClient.requestWrapper")
     def test_ResponseWrapperJsonKO(self, mock_requestWrapper: Mock):
         headersMock = Message()
         headersMock.add_header("Content-Type","text/json")
@@ -46,7 +46,7 @@ class HttpClientTestCase(unittest.TestCase):
         with self.assertRaises(json.JSONDecodeError) as jsonError:
             response.json()
 
-    @patch("appHelpers.tests.testHttpClient.requestWrapper")
+    @patch("tests.testHttpClient.requestWrapper")
     def test_ResponseWrapperBinaryOk(self, mock_requestWrapper: Mock):
         mock_requestWrapper.return_value = ResponseWrapper(
                 headers=None,

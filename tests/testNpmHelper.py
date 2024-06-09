@@ -31,7 +31,7 @@ class NpmHelperTestCase(unittest.TestCase):
             }
         }
 
-        with open("appHelpers/tests/assets/light-cycle-1.4.3.tgz","rb") as checkFile:
+        with open("tests/assets/light-cycle-1.4.3.tgz","rb") as checkFile:
             refData = checkFile.read()
         requestMock.return_value = ResponseWrapper(
                 headers=None,

@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.CustomExceptions import UnpublishedPackage
+from models.LocalTimeZone import LocalTimezone
 from dataclasses import dataclass
 
 class PackageDataInfo:
@@ -21,6 +22,11 @@ class PackageDataInfo:
         self.keywords:str = ", ".join(rawData.get("keywords",""))
 
         createdDatetime =datetime.strptime(rawData["time"]["created"],"%Y-%m-%dT%H:%M:%S.%fZ")
+        myTimezone = LocalTimezone()
+
+        createdDatetime = createdDatetime.replace(tzinfo=myTimezone)
+        createdDatetime = myTimezone.fromutc(createdDatetime)
+        
         self.createdDate:str = createdDatetime.strftime("%d/%m/%Y")
 
         readMeStr:str = rawData.get("readme","")
