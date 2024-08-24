@@ -2,7 +2,7 @@ from tkinter import Tk, ttk, PhotoImage, Frame, StringVar
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
 from controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
-from appHelpers.PngHelper import PngBuilder
+from appHelpers.PngHelper import PngBuilder, PicturePixels,Pixel
 from appHelpers.ConfigurationFileParser import ConfigurationFileData
 from models.GuiModels import UIOptions
 import argparse
@@ -34,7 +34,7 @@ def addLoader(parentFrame: Frame, options:UIOptions):
 	LoaderFrame(parentFrame,options).pack()
 
 def generateIconImg() -> PhotoImage:
-	actualData = []
+	actualData = PicturePixels()
 
 	row =0
 	while row < 32:
@@ -43,11 +43,11 @@ def generateIconImg() -> PhotoImage:
 		while col < 32:
 			if row > 2 and row <29 and (col in [4,5,6,25,26,27] or col==row or col == row+1 or col == row-1):
 
-				rowData.append([255,255,255,255])
+				rowData.append(Pixel(255,255,255,alpha=255))
 			else:
-				rowData.append([255,0,0,255])
+				rowData.append(Pixel(255,0,0,alpha=255))
 			col+=1
-		actualData.append(rowData)	
+		actualData.addRow(rowData)	
 		row+=1
 
 	pngBuilder = PngBuilder(actualData,32,32)

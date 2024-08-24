@@ -1,4 +1,4 @@
-from appHelpers.PngHelper import PngBuilder
+from appHelpers.PngHelper import PngBuilder, PicturePixels, Pixel
 import unittest
 from tkinter import PhotoImage, Tk
 import os
@@ -7,7 +7,7 @@ import os
 class PngHelperTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
-        actualData = []
+        actualData = PicturePixels()
 
         row =0
         while row < 32:
@@ -16,11 +16,11 @@ class PngHelperTestCase(unittest.TestCase):
             while col < 32:
                 if row > 2 and row <29 and (col in [4,5,6,25,26,27] or col==row or col == row+1 or col == row-1):
 
-                    rowData.append([255,255,255,255])
+                    rowData.append(Pixel(red=255,green=255,blue=255,alpha=255))
                 else:
-                    rowData.append([255,0,0,255])
+                    rowData.append(Pixel(red=255,green=0,blue=0,alpha=255))
                 col+=1
-            actualData.append(rowData)	
+            actualData.addRow(rowData)	
             row+=1
 
         self.photoBuilder = PngBuilder(actualData,32,32)

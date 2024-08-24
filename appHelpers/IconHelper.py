@@ -1,4 +1,4 @@
-from PngHelper import PngBuilder
+from PngHelper import PngBuilder, PicturePixels, Pixel
 import struct
 
 def returnIconHeaderValue():
@@ -10,7 +10,7 @@ def returnIconDirectory(width:int, height:int):
 	directoryBytes = struct.pack("<BBBBhhII",widthConfig, heightConfig, 1,0,0,1,width*height*4,22)
 	return directoryBytes
 
-def createIcon(actualData,width,height):
+def createIcon(actualData:PicturePixels,width:int,height:int):
 	
 	header = returnIconHeaderValue()
 	icondirectory = returnIconDirectory(width,height)
@@ -20,15 +20,15 @@ def createIcon(actualData,width,height):
 
 
 if __name__ == "__main__":
-	actualData = []
+	actualData = PicturePixels()
 	row =0
 	while row < 32:
 		col = 0
 		rowData = []
 		while col < 32:
-			rowData.append([255,127,0,255])
+			rowData.append(Pixel(red=255,green=127,blue=0,alpha=255))
 			col+=1
-		actualData.append(rowData)	
+		actualData.addRow(rowData)	
 		row+=1
 
 	iconFilebinary =createIcon(actualData, 32,32)
