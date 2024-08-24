@@ -9,6 +9,14 @@ class PngChunkName(Enum):
 	IEND="IEND"
 	PLTE="PLTE"
 
+@unique
+class PngColorType(Enum):
+	RGB=2
+	RGBA=6
+	GRAY=0
+	GRAYSCALEALPHA=4
+
+
 class PngChunkBuilder:
 
 	def __init__(self,chunkName:PngChunkName,data:bytes):
@@ -29,15 +37,17 @@ class PngChunkBuilder:
 class PngBuilder:
 	binaryContent:bytes
 
-	def __init__(self,rawData,height:int, width:int) -> None:
+	def __init__(self,rawData: list,height:int, width:int, colorMode:PngColorType=PngColorType.RGBA) -> None:
 		
 		pngBytesNearlyOK = []
 
 		# magic number
 		pngBytesNearlyOK.append(struct.pack('>BBBBBBBB', 137, 80, 78, 71, 13, 10, 26,10))
+
+		print(colorMode.value)
 		
 		# IDHR
-		pngBytesNearlyOK.append(PngChunkBuilder(PngChunkName.IHDR,struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0)).getBytesContent())
+		pngBytesNearlyOK.append(PngChunkBuilder(PngChunkName.IHDR,struct.pack('>IIBBBBB', width, height, 8, colorMode.value, 0, 0, 0)).getBytesContent())
 
 		# IDAT
 		image = []
