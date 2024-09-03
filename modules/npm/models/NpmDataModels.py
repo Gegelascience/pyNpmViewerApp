@@ -1,6 +1,6 @@
 from datetime import datetime
-from models.CustomExceptions import UnpublishedPackage
-from models.LocalTimeZone import LocalTimezone
+from modules.npm.models.NpmExceptions import UnpublishedPackage
+from modules.utils.models.LocalTimeZone import LocalTimezone
 from dataclasses import dataclass
 
 class PackageDataInfo:

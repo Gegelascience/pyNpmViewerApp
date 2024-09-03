@@ -1,21 +1,21 @@
-from appHelpers.NpmHelper import NpmHelper
-from appHelpers.HttpClient import ResponseWrapper
+from modules.npm.models.NpmClient import NpmClient
+from modules.utils.controllers.HttpClient import ResponseWrapper
 import unittest
 from datetime import datetime
 from unittest.mock import patch, Mock
 
-class NpmHelperTestCase(unittest.TestCase):
+class NpmClientTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.myNpmWrapper = NpmHelper()
+        self.myNpmWrapper = NpmClient()
 
     def test_getListIntervalOneYearNpm_Ok(self):
         startDate = datetime.strptime("01/01/1995", "%d/%m/%Y")
         endDate = datetime.strptime("01/01/1996", "%d/%m/%Y")
-        nbYear = NpmHelper.getListIntervalOneYearNpm(startDate,endDate)
+        nbYear = NpmClient.getListIntervalOneYearNpm(startDate,endDate)
         self.assertEqual(len(nbYear),2)
 
-    @patch("appHelpers.NpmHelper.requestWrapper")
+    @patch("modules.npm.models.NpmClient.requestWrapper")
     def test_checkIntegrity(self, requestMock:Mock):
         fakeNpmData = {
             "dist-tags": {

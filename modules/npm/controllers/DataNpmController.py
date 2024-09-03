@@ -1,7 +1,7 @@
-from appHelpers.NpmHelper import NpmHelper
+from modules.npm.models.NpmClient import NpmClient
 from threading import Thread
 from datetime import datetime
-from models.CustomExceptions import UnpublishedPackage
+from modules.npm.models.NpmExceptions import UnpublishedPackage
 
 
 class GetNpmDataThread(Thread):
@@ -21,7 +21,7 @@ class GetNpmDataThread(Thread):
 
 
     def run(self):
-        npmInfoClient = NpmHelper()
+        npmInfoClient = NpmClient()
         try:
             self.dataToShow = npmInfoClient.getPackageGeneralInfo(self.packageName)
             if not self.dataToShow:
@@ -34,7 +34,7 @@ class GetNpmDataThread(Thread):
                 createdAt = datetime.strptime(self.dataToShow.createdDate,"%d/%m/%Y")
 
                 
-                listInterval =NpmHelper.getListIntervalOneYearNpm(createdAt,now)
+                listInterval =NpmClient.getListIntervalOneYearNpm(createdAt,now)
                 for interval in listInterval:
                     downloadTmp = npmInfoClient.getDownloadBetween2Date(self.dataToShow.name,interval.get("start"), interval.get("end"))
                     if downloadTmp:

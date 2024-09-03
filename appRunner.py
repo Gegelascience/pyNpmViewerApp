@@ -1,10 +1,10 @@
 from tkinter import Tk, ttk, PhotoImage, Frame, StringVar
 from views.InfoNpmWidgets import InfoPackageWidget,GraphDownloadsWidget,ReadMeViewerWidget
-from controllers.DataNpmController import GetNpmDataThread
+from modules.npm.controllers.DataNpmController import GetNpmDataThread
 from views.genericWidgets import ErrorPopup, LoaderFrame
-from appHelpers.PngHelper import PngBuilder, PicturePixels,Pixel
-from appHelpers.ConfigurationFileParser import ConfigurationFileData
-from models.GuiModels import UIOptions
+from modules.picture.controllers.PngGenerator import PngBuilder, PicturePixels,Pixel
+from modules.utils.controllers.ConfigurationFileParser import ConfigurationFileData
+from modules.ui.models.GuiModels import UIOptions
 import argparse
 
 def getGUIOptions(configFilePath:str, section:str):

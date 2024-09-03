@@ -21,7 +21,8 @@ def testingProgram(resultWrapper:unitTestResultWrapper):
 
 if __name__ == "__main__":
     
-    testCaseDir = os.path.join(os.getcwd(),"appHelpers","tests")
+    testCaseDir = os.path.join(os.getcwd(),"tests")
+    print(testCaseDir)
 
     tracer = trace.Trace(ignoredirs=[sys.prefix, sys.exec_prefix,testCaseDir],ignoremods=["testRunner"],trace=0,count=1)
 
@@ -34,6 +35,10 @@ if __name__ == "__main__":
     r = tracer.results()
     if not os.path.exists("tmpCoverage"):
         os.mkdir("tmpCoverage")
+
+    for file in os.listdir("tmpCoverage"):
+        os.remove(os.path.join("tmpCoverage",file))
+    
     r.write_results(show_missing=True,coverdir="tmpCoverage")
 
     coverageWrapper =CoverageHelper("tmpCoverage")

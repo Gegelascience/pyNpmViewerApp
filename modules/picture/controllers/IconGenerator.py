@@ -1,4 +1,4 @@
-from PngHelper import PngBuilder, PicturePixels, Pixel
+from modules.picture.generator.PngGenerator import PngBuilder, PicturePixels, Pixel
 import struct
 
 def returnIconHeaderValue():

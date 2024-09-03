@@ -1,5 +1,5 @@
 from tkinter import ttk, Toplevel, Frame, Canvas
-from models.GuiModels import UIOptions
+from modules.ui.models.GuiModels import UIOptions
 
 class ErrorPopup(Toplevel):
     """

@@ -1,4 +1,4 @@
-from appHelpers.HttpClient import ResponseWrapper, requestWrapper, getBasicAuthorizationToken
+from modules.utils.controllers.HttpClient import ResponseWrapper, requestWrapper, getBasicAuthorizationToken
 import unittest
 from email.message import Message
 from unittest.mock import patch, Mock

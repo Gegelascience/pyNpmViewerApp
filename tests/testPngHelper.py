@@ -1,4 +1,4 @@
-from appHelpers.PngHelper import PngBuilder, PicturePixels, Pixel
+from modules.picture.controllers.PngGenerator import PngBuilder, PicturePixels, Pixel
 import unittest
 from tkinter import PhotoImage, Tk
 import os

@@ -1,5 +1,5 @@
 from datetime import datetime
-from models.LocalTimeZone import LocalTimezone
+from modules.utils.models.LocalTimeZone import LocalTimezone
 import unittest
 
 class LocalTimeZoneTestCase(unittest.TestCase):

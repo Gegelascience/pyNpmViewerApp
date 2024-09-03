@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
-from appHelpers.HttpClient import requestWrapper
-from models.NpmModels import PackageDataInfo, PackageDownloadInfo
+from modules.utils.controllers.HttpClient import requestWrapper
+from modules.npm.models.NpmDataModels import PackageDataInfo, PackageDownloadInfo
 import hashlib
 import base64
 
-class NpmHelper:
+class NpmClient:
 
     _baseUrlInfo: str = "https://registry.npmjs.org/"
     _baseUrlDownloadCount: str = "https://api.npmjs.org/downloads/range/"

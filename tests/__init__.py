@@ -1,4 +1,4 @@
-from .testNpmHelper import NpmHelperTestCase
+from .testNpmClient import NpmClientTestCase
 from .testHttpClient import HttpClientTestCase
 from .testPngHelper import PngHelperTestCase
 from .testLocaltimezone import LocalTimeZoneTestCase
