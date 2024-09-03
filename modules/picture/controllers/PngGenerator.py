@@ -1,28 +1,15 @@
 import zlib
 import struct
-from enum import Enum, IntEnum, unique
+from enum import Enum, unique
 
 @unique
 class PngChunkName(Enum):
 	IHDR="IHDR"
 	IDAT="IDAT"
 	IEND="IEND"
-	tIME="tIME"
-	tEXt="tEXt"
-	zTXt="zTXt"
 	PLTE="PLTE"
-	hIST="hIST"
-	tRNS="tRNS"
-	bKGD="bKGD"
-	cHRM="cHRM"
-	gAMA="gAMA"
-	pHYs="pHYs"
-	sBIT="sBIT"
 
-@unique
-class PhysicalPixelSizeUnit(IntEnum):
-    UNKNOWN = 0
-    METER = 1
+
 
 @unique
 class PngColorType(Enum):
