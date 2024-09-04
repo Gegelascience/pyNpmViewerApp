@@ -21,7 +21,7 @@ class PngColorType(Enum):
 
 class Pixel:
 
-	def __init__(self,red:int=0,green:int=0,blue:int=0,alpha:int=0,gray:int=0):
+	def __init__(self,red:int=0,green:int=0,blue:int=0,alpha:int=255,gray:int=0):
 		if not self.__checkCorrectValue(red):
 			raise Exception("invalid red value")
 		self.__red = red
