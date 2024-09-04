@@ -68,7 +68,7 @@ class Pixel:
 		elif colorMode == PngColorType.RGBA:
 			return (self.__red, self.__green,self.__blue, self.__alpha)
 		elif colorMode == PngColorType.GRAY:
-			return (self.__gray)
+			return (self.__gray,)
 		elif colorMode == PngColorType.GRAYSCALEALPHA:
 			return (self.__gray, self.__alpha)
 		
