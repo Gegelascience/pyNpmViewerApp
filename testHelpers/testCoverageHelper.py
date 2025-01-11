@@ -85,6 +85,12 @@ class CoverageHelper:
                 return True, k
             
         return False, None
+    
+    def isMinimulCoverage(self,minimumCoverage:int):
+        for spec in self.coverageReport:
+            if int(spec.get("coverage","0%").replace("%","0")) < minimumCoverage:
+                return False
+        return True
 
     def writeCoverageReport(self):
         with open ("coverage-report.csv","w",encoding="utf-8") as coverageFile:
